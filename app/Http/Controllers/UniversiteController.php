@@ -2,19 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Critere;
 use App\Models\Universite;
 use Illuminate\Http\Request;
+use App\Http\Controllers\NotationController;
 
 class UniversiteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         $universites = Universite::all();
-        return view('pages.universites', compact('universites'));
+        $criteres = Critere::all();
+        if (auth()->check()) {
+            $notationsController = new NotationController();
+            foreach ($universites as $universite) {
+                $universite->notes = $notationsController->getNotesByUniversityAndUser($universite->id);
+            }
+        }
+        $selectedCriteriaIds = $request->input('criteria');
+        return view('pages.universites', compact('universites', 'criteres', 'selectedCriteriaIds'));
     }
 
     /**
@@ -30,19 +40,8 @@ class UniversiteController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // $validatedData = $request->validate([
-        //     'nom' => 'required',
-        //     'description' => 'required',
-        //     'site_web' => 'required|url',
-        //     'contact' => 'required',
-        //     'adresse' => 'required',
-        //     'programmes_etude' => 'required',
-        //     'infrastructures' => 'required',
-        //     'historique' => 'required',
-        //     'BP' => 'required',
-        //     'statut' => 'boolean',
-        // ]);
+
+
         $data = new Universite();
         $data->nom = $request->input('nom');
         $data->description = $request->input('description');

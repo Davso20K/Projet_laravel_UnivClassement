@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CritereController;
+use App\Http\Controllers\NotationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UniversiteController;
 use App\Http\Controllers\UserController;
@@ -53,7 +54,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/utilisateur/{utilisateur}', [UserController::class, 'update'])->name('utilisateurs.update');
     Route::delete('/utilisateur/{utilisateur}', [UserController::class, 'destroy'])->name('utilisateurs.destroy');
 });
-
+//Notation
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notations/get/{universiteId}', [NotationController::class, 'getNotesByUniversityAndUser']);
+    Route::put('/notations/update/{universiteId}', [NotationController::class, 'update'])->name('notations.update');
+});
 
 
 require __DIR__ . '/auth.php';

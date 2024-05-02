@@ -34,7 +34,7 @@
         @endforeach
     </tbody>
 </table>
-<!-- Modal -->
+<!-- Modal d'ajout d'un critère -->
 <div class="modal fade" id="addCriteriaModal" tabindex="-1" role="dialog" aria-labelledby="addCriteriaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
