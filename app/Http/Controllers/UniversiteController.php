@@ -6,6 +6,7 @@ use App\Models\Critere;
 use App\Models\Universite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\NotationController;
+use App\Models\Notation;
 
 class UniversiteController extends Controller
 {
@@ -14,17 +15,22 @@ class UniversiteController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $universites = Universite::all();
         $criteres = Critere::all();
-        if (auth()->check()) {
-            $notationsController = new NotationController();
-            foreach ($universites as $universite) {
-                $universite->notes = $notationsController->getNotesByUniversityAndUser($universite->id);
+
+        // Calcul des moyennes de notation pour chaque critère et chaque université
+        foreach ($universites as $universite) {
+            foreach ($criteres as $criterion) {
+                $notations = Notation::where('universite_id', $universite->id)
+                    ->where('critere_id', $criterion->id)
+                    ->pluck('valeur')
+                    ->toArray();
+                $average = count($notations) > 0 ? array_sum($notations) / count($notations) : 0;
+                $universite->setAttribute('average_' . $criterion->id, $average);
             }
         }
-        $selectedCriteriaIds = $request->input('criteria');
-        return view('pages.universites', compact('universites', 'criteres', 'selectedCriteriaIds'));
+
+        return view('pages.universites', compact('universites', 'criteres'));
     }
 
     /**

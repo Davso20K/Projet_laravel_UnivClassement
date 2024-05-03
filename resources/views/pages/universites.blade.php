@@ -16,30 +16,39 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">
     Ajouter une université
 </button>
-@if (count($criteres) > 0)
-<div class="form-group">
-    <label for="criteria">Critères de classement:</label>
-    <div class="form-check">
-        @foreach ($criteres as $critere)
-        <input type="checkbox" class="form-check-input" id="criteria_{{ $critere->id }}" name="criteria[]" value="{{ $critere->id }}" checked>
-        <label class="form-check-label" for="criteria_{{ $critere->id }}">{{ $critere->libelle }}</label>
-        <br>
-        @endforeach
+<div id="criteriaCheckboxes" data-criteres="{{ json_encode($criteres) }}">
+    @if (count($criteres) > 0)
+    <div class="form-group">
+        <label for="criteria">Critères de classement:</label>
+        <div class="form-check" style="align-content: center;">
+            <ul>
+                @foreach ($criteres as $critere)
+                <li>
+                    <input type="checkbox" class="form-check-input" id="criteria_{{ $critere->id }}" name="criteria[]" value="{{ $critere->id }}" checked>
+                    <label class="form-check-label" for="criteria_{{ $critere->id }}">{{ $critere->libelle }}</label>
+                </li>
+                @endforeach
+            </ul>
+        </div>
     </div>
+    @endif
 </div>
-@endif
-<table>
+
+<table class="table" id="universitiesTable" data-universities="{{ json_encode($universites) }}">
     <thead>
         <tr>
             <th>Nom</th>
             <th>Description</th>
             <th>Site web</th>
             <th>Actions</th>
+
+            <th>Statut</th>
+
         </tr>
     </thead>
     <tbody>
         @foreach ($universites as $universite)
-        <tr>
+        <tr data-universite-id="{{ $universite->id }}">
             <td>{{ $universite->nom }}</td>
             <td>{{ $universite->description }}</td>
             <td><a href="{{ $universite->site_web }}">{{ $universite->site_web }}</a></td>
@@ -51,20 +60,19 @@
                 </button>
                 <a href="{{ route('universites.edit', $universite->id) }}">Modifier</a>
                 @if (count($criteres) > 0)
-            <td colspan="{{ count($criteres) }}">
-                {{ isset($universite->rankingScore) ? number_format($universite->rankingScore, 2) : 'Non classé' }}
+                <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Supprimer</button>
+                </form>
+                @endif
             </td>
-            @endif
-            <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Supprimer</button>
-            </form>
-            </td>
+
         </tr>
         @endforeach
     </tbody>
 </table>
+
 
 
 
@@ -154,6 +162,7 @@
         </div>
     </div>
 </div>
+
 <!-- Modal de notation d'une université -->
 <div class="modal fade" id="NoteUniversiteModal" tabindex="-1" role="dialog" aria-labelledby="NoteUniversiteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -180,7 +189,9 @@
     </div>
 </div>
 
-
+@php
+$universitesJson = json_encode($universites);
+@endphp
 <script>
     $(document).ready(function() {
         $('#NoteUniversiteModal').on('show.bs.modal', function(event) {
@@ -236,58 +247,70 @@
         });
 
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const criteriaCheckboxes = document.getElementById('criteriaCheckboxes');
+        const universitiesTable = document.getElementById('universitiesTable');
+        const universities = JSON.parse(universitiesTable.dataset.universities);
 
+        criteriaCheckboxes.addEventListener('change', function() {
+            const selectedCriteriaIds = Array.from(criteriaCheckboxes.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(checkbox => parseInt(checkbox.value));
 
+            const filteredUniversities = universities.map(university => {
+                let totalRating = 0;
+                let totalCriteria = 0;
 
-    const criteriaCheckboxes = document.querySelectorAll('input[name="criteria[]"]');
-    const criteria = {
-        ...($criteres || []).reduce((acc, critere) => {
-            acc[critere.id] = {
-                description: critere.description
-            };
-            return acc;
-        }, {}),
-    };
+                selectedCriteriaIds.forEach(criterionId => {
+                    const averageRating = university[`average_${criterionId}`];
+                    if (averageRating > 0) {
+                        totalRating += averageRating;
+                        totalCriteria++;
+                    }
+                });
 
-    function getAverageRating(university, criterionId) {
-        const ratings = university.notes.filter(note => note.critere_id === criterionId);
-        if (ratings.length > 0) {
-            return ratings.reduce((acc, rating) => acc + rating.valeur, 0) / ratings.length;
+                university.averageRating = totalCriteria > 0 ? totalRating / totalCriteria : 0;
+                return university;
+            }).filter(university => university.averageRating > 0);
+
+            renderUniversities(filteredUniversities);
+        });
+
+        function renderUniversities(universities) {
+            const tbody = universitiesTable.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            universities.sort((a, b) => {
+                return b.averageRating - a.averageRating; // Trie par ordre décroissant
+            });
+
+            universities.forEach(university => {
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-universite-id', university.id);
+                tr.innerHTML = `
+        <td>${university.nom}</td>
+        <td>${university.description}</td>
+        <td><a href="${university.site_web}">${university.site_web}</a></td>
+        <td>
+            <a href="/universites/${university.id}">Voir</a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
+                Noter ${university.id}
+            </button>
+            <a href="/universites/${university.id}/edit">Modifier</a>
+            <form action="/universites/${university.id}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Supprimer</button>
+            </form>
+        </td>
+        <td>${university.averageRating.toFixed(2)}</td>
+    `;
+                tbody.appendChild(tr);
+            });
         }
-        return 0;
-    }
 
-    function calculateRankingScore(university) {
-        let score = 0;
-        criteriaCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                const criterionId = parseInt(checkbox.value);
-                const averageRating = getAverageRating(university, criterionId);
-                const criterion = criteria[criterionId];
-                score += averageRating * criterion.description;
-            }
-        });
-        return score;
-    }
-
-    function updateRankingScores() {
-        universities.forEach(university => {
-            university.rankingScore = calculateRankingScore(university);
-        });
-    }
-
-    criteriaCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateRankingScores);
     });
-
-    updateRankingScores();
-    if ($selectedCriteriaIds) {
-        criteriaCheckboxes.forEach(checkbox => {
-            if ($selectedCriteriaIds.includes(parseInt(checkbox.value))) {
-                checkbox.checked = true;
-            }
-        });
-    };
 </script>
 
 
