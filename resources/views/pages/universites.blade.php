@@ -12,6 +12,11 @@
     {{ session('error') }}
 </div>
 @endif
+
+<head>
+    <link rel='stylesheet' href="{{asset('css/checkbox.css')}}">
+
+</head>
 <h1>Liste des universités</h1>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">
     Ajouter une université
@@ -21,10 +26,15 @@
     <div class="form-group">
         <label for="criteria">Critères de classement:</label>
         <div class="form-check" style="align-content: center;">
-            <ul>
+            <ul style="display: flex; flex-wrap: wrap;">
                 @foreach ($criteres as $critere)
-                <li>
-                    <input type="checkbox" class="form-check-input" id="criteria_{{ $critere->id }}" name="criteria[]" value="{{ $critere->id }}" checked>
+                <li style="display: flex; align-items: center;">
+                    <div class="checkbox-wrapper-26">
+                        <input type="checkbox" id="criteria_{{ $critere->id }}" name="criteria[]" value="{{ $critere->id }}">
+                        <label for="criteria_{{ $critere->id }}">
+                            <div class="tick_mark"></div>
+                        </label>
+                    </div>
                     <label class="form-check-label" for="criteria_{{ $critere->id }}">{{ $critere->libelle }}</label>
                 </li>
                 @endforeach
@@ -34,6 +44,9 @@
     @endif
 </div>
 
+
+
+
 <table class="table" id="universitiesTable" data-universities="{{ json_encode($universites) }}">
     <thead>
         <tr>
@@ -42,8 +55,9 @@
             <th>Site web</th>
             <th>Actions</th>
 
-            <th>Statut</th>
 
+            <th>Statut</th>
+            <th class="average-header" style="display: none;">Moyenne</th>
         </tr>
     </thead>
     <tbody>
@@ -54,7 +68,7 @@
             <td><a href="{{ $universite->site_web }}">{{ $universite->site_web }}</a></td>
             <td>
                 <a href="{{ route('universites.show', $universite->id) }}">Voir</a>
-
+                @auth
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="{{ $universite->id }}">
                     Noter {{ $universite->id }}
                 </button>
@@ -66,7 +80,9 @@
                     <button type="submit">Supprimer</button>
                 </form>
                 @endif
+                @endauth
             </td>
+            <td>Non classée</td>
 
         </tr>
         @endforeach
@@ -275,6 +291,8 @@ $universitesJson = json_encode($universites);
             }).filter(university => university.averageRating > 0);
 
             renderUniversities(filteredUniversities);
+            const averageHeader = document.querySelector('.average-header');
+            averageHeader.style.display = selectedCriteriaIds.length > 0 ? 'table-cell' : 'none';
         });
 
         function renderUniversities(universities) {
@@ -282,34 +300,64 @@ $universitesJson = json_encode($universites);
             tbody.innerHTML = '';
 
             universities.sort((a, b) => {
-                return b.averageRating - a.averageRating; // Trie par ordre décroissant
+                return b.averageRating - a.averageRating; // Tri par ordre décroissant
             });
 
             universities.forEach(university => {
                 const tr = document.createElement('tr');
                 tr.setAttribute('data-universite-id', university.id);
                 tr.innerHTML = `
-        <td>${university.nom}</td>
-        <td>${university.description}</td>
-        <td><a href="${university.site_web}">${university.site_web}</a></td>
-        <td>
-            <a href="/universites/${university.id}">Voir</a>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
-                Noter ${university.id}
-            </button>
-            <a href="/universites/${university.id}/edit">Modifier</a>
-            <form action="/universites/${university.id}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Supprimer</button>
-            </form>
-        </td>
-        <td>${university.averageRating.toFixed(2)}</td>
-    `;
+                <td>${university.nom}</td>
+                <td>${university.description}</td>
+                <td><a href="${university.site_web}">${university.site_web}</a></td>
+                <td>
+                    <a href="/universites/${university.id}">Voir</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
+                        Noter ${university.id}
+                    </button>
+                    <a href="/universites/${university.id}/edit">Modifier</a>
+                    <form action="/universites/${university.id}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+                <td>Classé</td>
+                <td>${university.averageRating.toFixed(2)}</td>
+                
+            `;
                 tbody.appendChild(tr);
             });
+
+            // Ajouter le th "Moyenne" si nécessaire
+            const thead = universitiesTable.querySelector('thead');
+            if (selectedCriteriaIds.length > 0) {
+                addAverageHeader(thead);
+            } else {
+                removeAverageHeader(thead);
+            }
         }
 
+        function addAverageHeader(thead) {
+            const existingAverageTh = thead.querySelector('.ranking-score');
+            if (!existingAverageTh) {
+                const averageTh = document.createElement('th');
+                averageTh.classList.add('ranking-score');
+                averageTh.textContent = 'Moyenne';
+
+                // Insérer le th "Moyenne" après le th "Actions"
+                const actionsTh = thead.querySelector('th:nth-child(4)');
+                actionsTh.parentNode.insertBefore(averageTh, actionsTh.nextSibling);
+            }
+        }
+
+
+        function removeAverageHeader(thead) {
+            const existingAverageTh = thead.querySelector('.ranking-score');
+            if (existingAverageTh) {
+                existingAverageTh.remove();
+            }
+        }
     });
 </script>
 

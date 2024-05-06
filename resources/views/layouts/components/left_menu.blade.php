@@ -30,7 +30,7 @@
                 <ul class="menu-links">
                     <div class="search-box">
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="{{route('dashboard')}}">
                                 <i class='bx bx-home-alt icon'></i>
                                 <span class="text nav-text">Dashboard</span>
                             </a>
@@ -45,6 +45,7 @@
                             </a>
                         </li>
                     </div>
+                    @auth
                     <div class="search-box">
 
                         <li class="nav-link">
@@ -75,6 +76,8 @@
                         </a>
                     </li>-->
                     </div>
+                    @endauth
+
 
                 </ul>
 
@@ -107,6 +110,7 @@
         @include('layouts.components.footer')
 
     </section>
+
 
     <script src="{{asset('js/script.js')}}"></script>
 </div>

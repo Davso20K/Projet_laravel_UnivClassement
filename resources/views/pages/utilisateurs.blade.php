@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@auth
 <h1>Liste des utilisateurs</h1>
 
 <table>
@@ -33,4 +34,6 @@
         @endforeach
     </tbody>
 </table>
+@endauth
+
 @endsection
