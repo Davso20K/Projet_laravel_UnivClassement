@@ -3,6 +3,7 @@
 @section('content')
 @auth
 <h1>Détails de l'utilisateur</h1>
+
 <p><strong>Nom :</strong> {{ $utilisateur->name }}</p>
 <p><strong>Email :</strong> {{ $utilisateur->email }}</p>
 <p><strong>Date de naissance :</strong> {{ $utilisateur->date_naiss }}</p>

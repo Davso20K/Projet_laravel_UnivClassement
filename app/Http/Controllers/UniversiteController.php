@@ -6,6 +6,7 @@ use App\Models\Critere;
 use App\Models\Universite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\NotationController;
+use App\Models\Commentaire;
 use App\Models\Notation;
 
 class UniversiteController extends Controller
@@ -72,7 +73,11 @@ class UniversiteController extends Controller
     public function show(Universite $universite)
     {
         //
-        return view('pages.universiteDetail', compact('universite'));
+        $commentaires = Commentaire::where('universite_id', $universite->id)
+            ->join('users', 'users.id', '=', 'commentaires.utilisateur_id')
+            ->select('commentaires.*', 'users.name as auteur')
+            ->get();
+        return view('pages.universiteDetail', compact('universite', 'commentaires'));
     }
 
     /**
@@ -97,7 +102,7 @@ class UniversiteController extends Controller
     public function destroy(Universite $universite)
     {
         //
-
+        $universite->notations()->delete();
         $universite->delete();
         return redirect()->route('universites.index')->with('success', 'Université supprimée avec succès.');
     }

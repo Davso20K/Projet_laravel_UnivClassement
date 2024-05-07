@@ -9,4 +9,8 @@ class Critere extends Model
 {
     use HasFactory;
     protected $table = "criteres";
+    public function notations()
+    {
+        return $this->hasMany(Notation::class, 'critere_id');
+    }
 }

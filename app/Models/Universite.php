@@ -11,6 +11,6 @@ class Universite extends Model
     protected $table = "universites";
     public function notations()
     {
-        return $this->hasMany(Notation::class);
+        return $this->hasMany(Notation::class, 'universite_id');
     }
 }

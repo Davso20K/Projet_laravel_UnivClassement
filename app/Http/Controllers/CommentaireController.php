@@ -29,6 +29,14 @@ class CommentaireController extends Controller
     public function store(Request $request)
     {
         //
+        $commentaire = new Commentaire();
+        $commentaire->utilisateur_id = auth()->user()->id;
+        $commentaire->contenu = $request->contenu;
+        $commentaire->universite_id = $request->universite_id;
+        $commentaire->statut = True;
+        $commentaire->save();
+
+        return redirect()->back()->with('success', 'Commentaire ajouté avec succès');
     }
 
     /**

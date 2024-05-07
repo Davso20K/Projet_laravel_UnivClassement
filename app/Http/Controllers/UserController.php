@@ -54,9 +54,17 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $userId)
     {
         //
+        echo ($userId);
+        $Utilisateur = User::find($userId);
+
+
+
+        $Utilisateur->est_actif = false;
+        $Utilisateur->save();
+        return redirect()->route('utilisateurs.index')->with('success', 'utilisateur désactivé avec succès');
     }
 
     /**

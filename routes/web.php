@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\CritereController;
 use App\Http\Controllers\NotationController;
 use App\Http\Controllers\ProfileController;
@@ -24,16 +25,20 @@ Route::middleware('auth')->group(function () {
 
 // Universités
 Route::get('/universites', [UniversiteController::class, 'index'])->name('universites.index');
+Route::get('/universite/{universite}', [UniversiteController::class, 'show'])->name('universites.show');
+
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/universite/create', [UniversiteController::class, 'create'])->name('universites.create');
     Route::post('/universite', [UniversiteController::class, 'store'])->name('universites.store');
-    Route::get('/universite/{universite}', [UniversiteController::class, 'show'])->name('universites.show');
     Route::get('/universite/{universite}/edit', [UniversiteController::class, 'edit'])->name('universites.edit');
     Route::put('/universite/{universite}', [UniversiteController::class, 'update'])->name('universites.update');
     Route::delete('/universite/{universite}', [UniversiteController::class, 'destroy'])->name('universites.destroy');
 });
-
+//Commentaires
+Route::middleware(['auth'])->group(function () {
+    Route::post('/commentaire/{universite_id}', [CommentaireController::class, 'store'])->name('commentaires.store');
+});
 // Critères
 Route::middleware(['auth'])->group(function () {
     Route::get('/criteres', [CritereController::class, 'index'])->name('criteres.index');
@@ -52,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/utilisateur', [UserController::class, 'store'])->name('utilisateurs.store');
     Route::get('/utilisateur/{utilisateur}', [UserController::class, 'show'])->name('utilisateurs.show');
     Route::get('/utilisateur/{utilisateur}/edit', [UserController::class, 'edit'])->name('utilisateurs.edit');
-    Route::put('/utilisateur/{utilisateur}', [UserController::class, 'update'])->name('utilisateurs.update');
+    Route::get('/utilisateur/{utilisateur}/desactiver', [UserController::class, 'update'])->name('utilisateurs.update');
     Route::delete('/utilisateur/{utilisateur}', [UserController::class, 'destroy'])->name('utilisateurs.destroy');
 });
 //Notation

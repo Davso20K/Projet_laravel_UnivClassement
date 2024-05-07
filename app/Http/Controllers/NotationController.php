@@ -99,8 +99,9 @@ class NotationController extends Controller
 
 
     public function getNotesByUniversityAndUser($universiteId)
+
     {
-        if (auth()->check()) {
+        if (auth()->check() and auth()->user()->est_actif) {
             $userId = auth()->user()->id;
             $notes = Notation::where('universite_id', $universiteId)
                 ->where('utilisateur_id', $userId)
@@ -114,6 +115,8 @@ class NotationController extends Controller
             $criteres = Critere::all();
 
             return response()->json(['notesByCriteria' => $notesByCriteria, 'criteres' => $criteres]);
+        } else {
+            echo "Ce compte n'est pas autorisé à noter une université";
         }
 
         return response()->json(['error' => 'User not authenticated'], 401);

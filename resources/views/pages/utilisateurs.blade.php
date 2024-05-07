@@ -2,6 +2,7 @@
 
 @section('content')
 @auth
+@if(auth()->user()->est_actif)
 <h1>Liste des utilisateurs</h1>
 
 <table>
@@ -34,6 +35,8 @@
         @endforeach
     </tbody>
 </table>
+@else
+@endif
 @endauth
-
+Ce compte est désactivé.
 @endsection
