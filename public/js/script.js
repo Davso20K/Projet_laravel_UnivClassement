@@ -7,6 +7,7 @@ const body = document.querySelector("body"),
 
 toggle.addEventListener("click", () => {
     sidebar.classList.toggle("close");
+    sidebar.style.width = sidebar.offsetWidth === 250 ? "50px" : "250px";
 });
 
 searchBtn.addEventListener("click", () => {

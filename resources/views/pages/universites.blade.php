@@ -16,6 +16,8 @@
 <head>
     <link rel='stylesheet' href="{{asset('css/checkbox.css')}}">
 
+
+
 </head>
 <h1>Liste des universités</h1>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">

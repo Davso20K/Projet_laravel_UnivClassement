@@ -1,3 +1,33 @@
+@extends('layouts.app')
+@section('content')
+
+<!-- <head>
+    <link rel="stylesheet" href="{{asset('css/login.css')}}" />
+</head> -->
+<!-- <div class="containerr">
+    <div class="heading">S'authentifier</div>
+    <form method="POST" action="{{ route('login') }}" class="form">
+        @csrf
+        <div>
+            <label for="email" class="block">Email</label>
+            <input required="" class="input" type="email" name="email" id="email" placeholder="E-mail">
+        </div>
+        <div>
+            <label for="password" class="block">Password</label>
+            <input required="" class="input" type="password" name="password" id="password" placeholder="Password">
+        </div>
+        <div class="block mt-4">
+            <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+            <label for="remember_me" class="ms-2 text-sm text-gray-600">Remember me</label>
+        </div>
+        <div class="flex items-center justify-end mt-4">
+            <a href="#" class="forgot-password">Forgot Password ?</a>
+            <input class="login-button" type="submit" value="Sign In">
+        </div>
+    </form>
+
+    <span class="agreement"><a href="#">Learn user licence agreement</a></span>
+</div> -->
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -42,3 +72,4 @@
         </div>
     </form>
 </x-guest-layout>
+@endsection

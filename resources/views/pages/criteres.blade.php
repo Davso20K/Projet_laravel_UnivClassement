@@ -1,14 +1,12 @@
 @extends('layouts.app')
 @section('content')
-@extends('layouts.app')
 
-@section('content')
 @auth
 <h1>Liste des critères</h1>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCriteriaModal">
     Ajouter un critere
 </button>
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Libellé</th>
@@ -24,7 +22,7 @@
             <td>{{ $critere->description }}</td>
             <td>{{ $critere->statut ? 'Actif' : 'Inactif' }}</td>
             <td>
-                <a href="{{ route('criteres.show', $critere->id) }}">Voir</a>
+                <a href="{{ route('criteres.show', $critere->id) }}">Details</a>
                 <form action="{{ route('criteres.destroy', $critere->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce critère ?');">
                     @csrf
                     @method('DELETE')
@@ -73,6 +71,4 @@
     </div>
 </div>
 @endauth
-@endsection
-
 @endsection

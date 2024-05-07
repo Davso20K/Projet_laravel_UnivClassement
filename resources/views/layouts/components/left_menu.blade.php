@@ -1,11 +1,16 @@
 <head>
-    <link rel="stylesheet" href="style.css">
 
+    <link rel='stylesheet' href="{{asset('css/style.css')}}">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <link rel='stylesheet' href="{{asset('css/style.css')}}">
+
 </head>
 
 <div class="row flex-nowrap">
@@ -15,10 +20,7 @@
                 <span class="image">
                     <!--<img src="logo.png" alt="">-->
                 </span>
-                <div class="text logo-text">
-                    <span class="name">Codinglab</span>
-                    <span class="profession">Web developer</span>
-                </div>
+
             </div>
             <i class='bx bx-chevron-right toggle'></i>
         </header>
@@ -28,77 +30,49 @@
 
 
                 <ul class="menu-links">
-                    <div class="search-box">
+                    <div class="">
                         <li class="nav-link">
                             <a href="{{route('dashboard')}}">
-                                <i class='bx bx-home-alt icon'></i>
+                                <i class='bx bx-home-alt icon' style="margin-left: -25px;"></i>
                                 <span class="text nav-text">Dashboard</span>
                             </a>
                         </li>
                     </div>
-                    <div class="search-box">
+                    <div class="">
 
                         <li class="nav-link">
                             <a href="{{route('universites.index')}}">
-                                <i class='bx bx-bar-chart-alt-2 icon'></i>
+                                <i class='bx bx-bar-chart-alt-2 icon' style="margin-left: -25px;"></i>
                                 <span class="text nav-text">Universités</span>
                             </a>
                         </li>
                     </div>
                     @auth
-                    <div class="search-box">
+                    <div class="">
 
                         <li class="nav-link">
                             <a href="{{route('criteres.index')}}">
-                                <i class='bx bx-bell icon'></i>
+                                <i class='bx bx-bell icon' style="margin-left: -25px;"></i>
                                 <span class="text nav-text">Critères</span>
                             </a>
                         </li>
                     </div>
-                    <div class="search-box">
+                    <div class="">
 
                         <li class="nav-link">
                             <a href="{{route('utilisateurs.index')}}">
-                                <i class='bx bx-pie-chart-alt icon'></i>
+                                <i class='bx bx-pie-chart-alt icon' style="margin-left: -25px;"></i>
                                 <span class="text nav-text">Utilisateurs</span>
                             </a>
                         </li>
-                        <!-- <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-heart icon'></i>
-                            <span class="text nav-text">Likes</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-wallet icon'></i>
-                            <span class="text nav-text">Wallets</span>
-                        </a>
-                    </li>-->
+
                     </div>
                     @endauth
 
 
                 </ul>
 
-                <!-- </div> 
-            <div class="bottom-content">
-                <li class="">
-                    <a href="#">
-                        <i class='bx bx-log-out icon'></i>
-                        <span class="text nav-text">Logout</span>
-                    </a>
-                </li>
-                <li class="mode">
-                    <div class="sun-moon">
-                        <i class='bx bx-moon icon moon'></i>
-                        <i class='bx bx-sun icon sun'></i>
-                    </div>
-                    <span class="mode-text text">Dark mode</span>
-                    <div class="toggle-switch">
-                        <span class="switch"></span>
-                    </div>
-                </li> -->
+
 
             </div>
         </div>
