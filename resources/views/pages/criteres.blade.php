@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('content')
+@if(Auth::user()?->is_admin)
 
-@auth
+
 <h1>Liste des critères</h1>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCriteriaModal">
     Ajouter un critere
@@ -70,5 +71,5 @@
         </div>
     </div>
 </div>
-@endauth
+@endif
 @endsection

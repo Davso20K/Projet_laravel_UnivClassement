@@ -13,4 +13,8 @@ class Universite extends Model
     {
         return $this->hasMany(Notation::class, 'universite_id');
     }
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class, 'universite_id');
+    }
 }

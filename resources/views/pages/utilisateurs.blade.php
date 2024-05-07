@@ -2,7 +2,8 @@
 
 @section('content')
 @auth
-@if(auth()->user()->est_actif)
+@if(Auth::user()?->is_admin and Auth::user()?->est_actif)
+
 <h1>Liste des utilisateurs</h1>
 
 <table>
@@ -36,7 +37,7 @@
     </tbody>
 </table>
 @else
-@endif
-@endauth
 Ce compte est désactivé.
+
+@endif
 @endsection

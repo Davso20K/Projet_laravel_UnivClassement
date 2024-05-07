@@ -55,7 +55,7 @@
 
                     <hr>
 
-                    @auth
+
                     <div class="row mb-4" style="margin-top: 20px;">
                         <div class="col-md-12">
                             <h4 style="margin-bottom: 20px;">Ajouter un commentaire</h4>
@@ -68,7 +68,7 @@
                             </form>
                         </div>
                     </div>
-                    @endauth
+
 
                     <div class="container mt-5">
 
@@ -97,14 +97,15 @@
                                         <div class="comment-content">
                                             <p>{{ $commentaire->contenu }}</p>
                                         </div>
-                                        @auth
+                                        @if(Auth::user()?->is_admin)
+
                                         <div class="comment-actions d-flex justify-content-between mt-2 align-items-center">
                                             <div class="reply px-4">
                                                 <small>Remove</small>
                                                 <span class="dots"></span>
                                             </div>
                                         </div>
-                                        @endauth
+                                        @endif
                                     </div>
                                     @endforeach
                                 </div>

@@ -28,13 +28,26 @@
             <div class="menu">
 
 
-
                 <ul class="menu-links">
+
+                    @if(Auth::user()?->is_admin)
+
+
                     <div class="">
                         <li class="nav-link">
                             <a href="{{route('dashboard')}}">
                                 <i class='bx bx-home-alt icon' style="margin-left: -25px;"></i>
                                 <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                    </div>
+                    @endif
+                    <div class="">
+
+                        <li class="nav-link">
+                            <a href="{{route('accueil')}}">
+                                <i class='bx bx-bar-chart-alt-2 icon' style="margin-left: -25px;"></i>
+                                <span class="text nav-text">accueil</span>
                             </a>
                         </li>
                     </div>
@@ -48,6 +61,8 @@
                         </li>
                     </div>
                     @auth
+                    @if(Auth::user()?->is_admin)
+
                     <div class="">
 
                         <li class="nav-link">
@@ -68,7 +83,7 @@
 
                     </div>
                     @endauth
-
+                    @endif
 
                 </ul>
 

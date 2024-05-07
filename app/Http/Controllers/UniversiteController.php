@@ -103,6 +103,7 @@ class UniversiteController extends Controller
     {
         //
         $universite->notations()->delete();
+        Commentaire::where('universite_id', $universite->id)->delete();
         $universite->delete();
         return redirect()->route('universites.index')->with('success', 'Université supprimée avec succès.');
     }

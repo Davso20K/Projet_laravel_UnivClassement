@@ -67,18 +67,22 @@
                         <path d="M7.143 1.5c.97 0 1.927.18 2.833.536a13.29 13.29 0 0 1 2.361 1.237c.715.636 1.364 1.37 1.926 2.16a15.84 15.84 0 0 1 1.524 2.36c.356.714.64 1.497.835 2.333a13.29 13.29 0 0 1 .536 2.834c0 .97-.18 1.927-.536 2.833a13.29 13.29 0 0 1-1.237 2.361c-.636.715-1.37 1.364-2.16 1.926a15.84 15.84 0 0 1-2.36 1.524c-.714.356-1.497.64-2.333.835a13.29 13.29 0 0 1-2.834.536zM8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
                     </svg>
                 </a>
-                @auth
+                @if(Auth::user())
+
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="{{ $universite->id }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
                         <path d="M7.868.235a.5.5 0 0 1 .264 0l1.723.286a.5.5 0 0 1 .276.148l.824.823a.5.5 0 0 1 .149.276l.286 1.723a.5.5 0 0 1-.073.353l-1.187 1.49a.5.5 0 0 1-.312.164l-1.563.28a1.5 1.5 0 0 1-1.11-.44l-.74-.739a.5.5 0 0 1-.138-.403L5.66 4.418a1.5 1.5 0 0 1 .21-1.042l.823-1.097a.5.5 0 0 1 .353-.186zM8 12.5a.5.5 0 0 1-.377-.171l-1.454-1.663a.5.5 0 0 1-.094-.301L6.07 7.398a.5.5 0 0 1 .144-.34l1.187-1.49a.5.5 0 0 1 .312-.164l1.563-.28a1.5 1.5 0 0 1 1.11.44l.74.739a.5.5 0 0 1 .138.403l-.286 1.723a.5.5 0 0 1-.149.276l-.824.823a.5.5 0 0 1-.276.148l-1.723.286a.5.5 0 0 1-.264 0zM3.5 14a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zm10 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zM2 14.5a.5.5 0 0 1-.5-.5V2.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H2z" />
                     </svg>
                 </button>
+                @if(Auth::user()?->is_admin)
+
 
                 <a href="{{ route('universites.edit', $universite->id) }}" class="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                         <path d="M13.293 0.293a1 1 0 0 1 1.414 0l1 1a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-.39.242l-4 1a1 1 0 0 1-1.242-1.242l1-4a1 1 0 0 1 .242-.39l10-10zM12 2l1.586 1.586-9.172 9.172-.086.329.329-.086 9.172-9.172L14 3.414 12.586 2H12zm-3.086 10.5l-1.75 1.75a.5.5 0 0 1-.707 0l-6-6a.5.5 0 0 1 0-.707l1.75-1.75L9.914 11.5z" />
                     </svg>
                 </a>
+
                 @if (count($criteres) > 0)
                 <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
                     @csrf
@@ -90,7 +94,16 @@
                     </button>
                 </form>
                 @endif
-                @endauth
+                @endif
+                @else
+                <button type="button" class="btn btn-primary">
+                    <a href="{{route('login')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                            <path d="M7.868.235a.5.5 0 0 1 .264 0l1.723.286a.5.5 0 0 1 .276.148l.824.823a.5.5 0 0 1 .149.276l.286 1.723a.5.5 0 0 1-.073.353l-1.187 1.49a.5.5 0 0 1-.312.164l-1.563.28a1.5 1.5 0 0 1-1.11-.44l-.74-.739a.5.5 0 0 1-.138-.403L5.66 4.418a1.5 1.5 0 0 1 .21-1.042l.823-1.097a.5.5 0 0 1 .353-.186zM8 12.5a.5.5 0 0 1-.377-.171l-1.454-1.663a.5.5 0 0 1-.094-.301L6.07 7.398a.5.5 0 0 1 .144-.34l1.187-1.49a.5.5 0 0 1 .312-.164l1.563-.28a1.5 1.5 0 0 1 1.11.44l.74.739a.5.5 0 0 1 .138.403l-.286 1.723a.5.5 0 0 1-.149.276l-.824.823a.5.5 0 0 1-.276.148l-1.723.286a.5.5 0 0 1-.264 0zM3.5 14a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zm10 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zM2 14.5a.5.5 0 0 1-.5-.5V2.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H2z" />
+                        </svg>
+                    </a>
+                </button>
+                @endif
             </div>
         </div>
     </div>
@@ -220,9 +233,11 @@
 @php
 $universitesJson = json_encode($universites);
 @endphp
+
 <script>
     $(document).ready(function() {
         $('#NoteUniversiteModal').on('show.bs.modal', function(event) {
+
             var button = $(event.relatedTarget);
             var universiteId = button.data('universite-id');
             var modal = $(this);

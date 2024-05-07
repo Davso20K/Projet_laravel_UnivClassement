@@ -13,4 +13,8 @@ class Commentaire extends Model
     {
         return $this->belongsTo(User::class, 'id', 'utilisateur_id');
     }
+    public function universite()
+    {
+        return $this->belongsTo(Universite::class, 'id', 'universite_id');
+    }
 }
