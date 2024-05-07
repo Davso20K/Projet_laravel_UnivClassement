@@ -23,39 +23,43 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">
     Ajouter une université
 </button>
-<div id="criteriaCheckboxes" data-criteres="{{ json_encode($criteres) }}">
-    @if (count($criteres) > 0)
-    <div class="form-group">
-        <label for="criteria">Critères de classement:</label>
-        <div class="form-check" style="align-content: center;">
-            <ul style="display: flex; flex-wrap: wrap;">
-                @foreach ($criteres as $critere)
-                <li style="display: flex; align-items: center;">
-                    <div class="checkbox-wrapper-26">
-                        <input type="checkbox" id="criteria_{{ $critere->id }}" name="criteria[]" value="{{ $critere->id }}">
-                        <label for="criteria_{{ $critere->id }}">
-                            <div class="tick_mark"></div>
-                        </label>
-                    </div>
-                    <label class="form-check-label" for="criteria_{{ $critere->id }}">{{ $critere->libelle }}</label>
-                </li>
-                @endforeach
-            </ul>
+<div class="overflow-auto" style="max-height: 300px;">
+    <div id="criteriaCheckboxes" data-criteres="{{ json_encode($criteres) }}">
+        @if (count($criteres) > 0)
+        <div class="form-group">
+            <label for="criteria">Critères de classement:</label>
+            <div class="form-check" style="align-content: center;">
+                <ul style="display: flex; flex-wrap: wrap;">
+                    @foreach ($criteres as $critere)
+                    <li style="display: flex; align-items: center;">
+                        <div class="checkbox-wrapper-26">
+                            <input type="checkbox" id="criteria_{{ $critere->id }}" name="criteria[]" value="{{ $critere->id }}">
+                            <label for="criteria_{{ $critere->id }}">
+                                <div class="tick_mark"></div>
+                            </label>
+                        </div>
+                        <label class="form-check-label" for="criteria_{{ $critere->id }}">{{ $critere->libelle }}</label>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
+        @endif
     </div>
-    @endif
 </div>
 
 
 
 <div class="row">
     @foreach ($universites as $key => $universite)
-    @if ($key % 3 === 0)
+    @if ($key % 4 === 0)
 </div>
 <div id="universitiesContainer" data-universities="{{ $universites->toJson() }}" class="row">
     @endif
-    <div class="col-md-4">
-        <div class="card" style="margin-top: 10px;">
+    <div class="col-md-3">
+        <div class="card" style="margin-top:10px">
+            <img src="{{ asset('storage/universites_images/' . $universite->image) }}" class="card-img-top" alt="Université image">
+
             <div class="card-body">
                 <h5 class="card-title">{{ $universite->nom }}</h5>
                 <p class="card-text">{{ $universite->description }}</p>
@@ -121,7 +125,7 @@
 <div class="modal fade" id="createUniversiteModal" tabindex="-1" role="dialog" aria-labelledby="createUniversiteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('universites.store') }}" method="POST">
+            <form action="{{ route('universites.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="createUniversiteModalLabel">Ajouter une université</h5>
@@ -189,6 +193,15 @@
                                 <input type="text" class="form-control" id="BP" name="BP">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/jpeg, image/png">
+                            </div>
+                        </div>
+
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="statut" name="statut" checked>

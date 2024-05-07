@@ -40,4 +40,5 @@
 Ce compte est désactivé.
 
 @endif
+@endauth
 @endsection
