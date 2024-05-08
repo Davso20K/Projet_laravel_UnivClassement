@@ -87,7 +87,8 @@
                                     <div class="comment">
                                         <div class="comment-header d-flex justify-content-between">
                                             <div class="user d-flex flex-row align-items-center">
-                                                <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2">
+
+                                                <img src="{{ asset('icones/user.svg') }}" width="30" class="user-img rounded-circle mr-2">
                                                 <span>
                                                     <h4 class="font-weight-bold text-primary">{{ $commentaire->auteur }}</h4>
                                                 </span>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\NotationController;
 use App\Models\Commentaire;
 use App\Models\Notation;
+use Illuminate\Support\Facades\Storage;
 
 class UniversiteController extends Controller
 {
@@ -96,14 +97,47 @@ class UniversiteController extends Controller
     public function edit(Universite $universite)
     {
         //
+        return view('pages.universiteEdit', compact('universite'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Universite $universite)
+    public function update(Request $request, $id)
     {
-        //
+        $universite = Universite::findOrFail($id);
+
+        // $request->validate([
+        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2048',
+
+        // ]);
+
+        // Sauvegarder l'ancienne image
+        $ancienneImage = $universite->image;
+
+        $universite->nom = $request->input('nom');
+        $universite->description = $request->input('description');
+        $universite->site_web = $request->input('site_web');
+        $universite->contact = $request->input('contact');
+        $universite->adresse = $request->input('adresse');
+        $universite->programmes_etude = $request->input('programmes_etude');
+        $universite->infrastructures = $request->input('infrastructures');
+        $universite->historique = $request->input('historique');
+        $universite->BP = $request->input('BP');
+
+        if ($request->hasFile('image')) {
+            // Stocker la nouvelle image
+            $imagePath = $request->file('image')->store('public/universites_images');
+            $imageName = basename($imagePath);
+            $universite->image = $imageName;
+
+            // Supprimer l'ancienne image
+            Storage::delete('public/universites_images/' . $ancienneImage);
+        }
+
+        $universite->save();
+
+        return redirect()->route('universites.show', $universite)->with('success', 'Université mise à jour avec succès.');
     }
 
     /**
