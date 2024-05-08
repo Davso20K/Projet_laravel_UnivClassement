@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UniversiteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         $universites = Universite::all();
@@ -35,17 +33,13 @@ class UniversiteController extends Controller
         return view('pages.universites.universites', compact('universites', 'criteres'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $request->validate([
@@ -78,9 +72,7 @@ class UniversiteController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Universite $universite)
     {
         //
@@ -91,18 +83,13 @@ class UniversiteController extends Controller
         return view('pages.universites.universiteDetail', compact('universite', 'commentaires'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Universite $universite)
     {
-        //
+
         return view('pages.universites.universiteEdit', compact('universite'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, $id)
     {
         $universite = Universite::findOrFail($id);
@@ -112,7 +99,7 @@ class UniversiteController extends Controller
 
         ]);
 
-        // Sauvegarder l'ancienne image
+        // Sauvegarde de l'ancienne image
         $ancienneImage = $universite->image;
 
         $universite->nom = $request->input('nom');
@@ -126,12 +113,12 @@ class UniversiteController extends Controller
         $universite->BP = $request->input('BP');
 
         if ($request->hasFile('image')) {
-            // Stocker la nouvelle image
+            // Stockage la nouvelle image
             $imagePath = $request->file('image')->store('public/universites_images');
             $imageName = basename($imagePath);
             $universite->image = $imageName;
 
-            // Supprimer l'ancienne image
+            // Suppression de l'ancienne image
             Storage::delete('public/universites_images/' . $ancienneImage);
         }
 
@@ -140,12 +127,10 @@ class UniversiteController extends Controller
         return redirect()->route('universites.show', $universite)->with('success', 'Université mise à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Universite $universite)
     {
-        //
+
         $universite->notations()->delete();
         Commentaire::where('universite_id', $universite->id)->delete();
         $universite->delete();

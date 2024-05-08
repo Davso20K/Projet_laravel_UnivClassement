@@ -7,27 +7,21 @@ use Illuminate\Http\Request;
 
 class CritereController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+
         $criteres = Critere::all();
         return view('pages.criteres.criteres', compact('criteres'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
 
@@ -46,27 +40,21 @@ class CritereController extends Controller
         return redirect()->route('criteres.index')->with('success', 'Le critère a été créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Critere $critere)
     {
-        //
+
         return view('pages.criteres.critereDetail', compact('critere'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Critere $critere)
     {
-        //
+
         return view('pages.criteres.critereEdit', compact('critere'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, $id)
     {
         $critere = Critere::findOrFail($id);
@@ -87,12 +75,10 @@ class CritereController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Critere $critere)
     {
-        //
+
         $critere->delete();
         return redirect()->route('criteres.index')->with('success', 'Critère supprimée avec succès.');
     }
