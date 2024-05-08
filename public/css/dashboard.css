@@ -1,0 +1,52 @@
+.element {
+    position: relative;
+    margin-top: 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border-radius: 0.75rem;
+    height: 14rem;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+.element h4 {
+    margin-top: 0;
+}
+
+.element p {
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+.center-vertically {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Couleurs différentes pour chaque div */
+.element:nth-child(1) {
+    background-color: rgb(33, 150, 243); /* Bleu */
+    box-shadow: 0 10px 15px -3px rgba(33, 150, 243, 0.4),
+        0 4px 6px -4px rgba(33, 150, 243, 0.4);
+}
+
+.element:nth-child(2) {
+    background-color: rgb(255, 193, 7); /* Jaune */
+    box-shadow: 0 10px 15px -3px rgba(255, 193, 7, 0.4),
+        0 4px 6px -4px rgba(255, 193, 7, 0.4);
+}
+
+.element:nth-child(3) {
+    background-color: rgb(244, 67, 54); /* Rouge */
+    box-shadow: 0 10px 15px -3px rgba(244, 67, 54, 0.4),
+        0 4px 6px -4px rgba(244, 67, 54, 0.4);
+}
+
+.element:nth-child(4) {
+    background-color: rgb(76, 175, 80); /* Vert */
+    box-shadow: 0 10px 15px -3px rgba(76, 175, 80, 0.4),
+        0 4px 6px -4px rgba(76, 175, 80, 0.4);
+}

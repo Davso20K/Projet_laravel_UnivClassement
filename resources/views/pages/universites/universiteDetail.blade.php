@@ -82,12 +82,11 @@
 
                                 </div>
 
-                                <div class="scrollView border  rounded">
+                                <div class="scrollView border rounded">
                                     @foreach ($commentaires as $commentaire)
                                     <div class="comment">
                                         <div class="comment-header d-flex justify-content-between">
                                             <div class="user d-flex flex-row align-items-center">
-
                                                 <img src="{{ asset('icones/user.svg') }}" width="30" class="user-img rounded-circle mr-2">
                                                 <span>
                                                     <h4 class="font-weight-bold text-primary">{{ $commentaire->auteur }}</h4>
@@ -98,13 +97,13 @@
                                         <div class="comment-content">
                                             <p>{{ $commentaire->contenu }}</p>
                                         </div>
-                                        @if(Auth::user()?->is_admin)
-
+                                        @if(Auth::user()->is_admin)
                                         <div class="comment-actions d-flex justify-content-between mt-2 align-items-center">
-                                            <div class="reply px-4">
-                                                <small>Remove</small>
-                                                <span class="dots"></span>
-                                            </div>
+                                            <form action="{{ route('commentaires.destroy', $commentaire->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-link">Supprimer</button>
+                                            </form>
                                         </div>
                                         @endif
                                     </div>
@@ -114,13 +113,16 @@
 
                             </div>
 
+
                         </div>
 
                     </div>
 
                 </div>
+
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection

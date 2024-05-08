@@ -25,17 +25,26 @@
             <td>{{ $utilisateur->est_actif ? 'Actif' : 'Inactif' }}</td>
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
-                    <a href="{{ route('utilisateurs.show', $utilisateur->id) }}" class="btn btn-primary" title="Voir les détails de cet utilisateur">
-                        <img src="{{ asset('icones/infos.svg') }}" style="height: 30px;" />
-                    </a>
+                    <div class="col-md-4">
+
+                        <a href="{{ route('utilisateurs.show', $utilisateur->id) }}" class="btn btn-primary" title="Voir les détails de cet utilisateur">
+                            <img src="{{ asset('icones/infos.svg') }}" style="height: 30px;" />
+                        </a>
+                    </div>
                     @if($utilisateur->est_actif)
-                    <a href="{{ route('utilisateurs.desactiver', $utilisateur->id) }}" class="btn " title="Désactiver ce compte utilisateur">
-                        <img src="{{ asset('icones/activated.svg') }}" style="height: 30px;" />
-                    </a>
+                    <div class="col-md-4">
+
+                        <a href="{{ route('utilisateurs.desactiver', $utilisateur->id) }}" class="btn " title="Désactiver ce compte utilisateur">
+                            <img src="{{ asset('icones/activated.svg') }}" style="height: 30px;" />
+                        </a>
+                    </div>
                     @else
-                    <a href="{{ route('utilisateurs.activer', $utilisateur->id) }}" class="btn " title="Activer ce compte utilisateur">
-                        <img src="{{ asset('icones/desactivated.svg') }}" style="height: 30px;" />
-                    </a>
+                    <div class="col-md-4">
+
+                        <a href="{{ route('utilisateurs.activer', $utilisateur->id) }}" class="btn " title="Activer ce compte utilisateur">
+                            <img src="{{ asset('icones/desactivated.svg') }}" style="height: 30px;" />
+                        </a>
+                    </div>
                     @endif
                     <form action="{{ route('utilisateurs.destroy', $utilisateur->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');">
                         @csrf

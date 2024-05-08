@@ -53,8 +53,16 @@ class CommentaireController extends Controller
     }
 
 
-    public function destroy(Commentaire $commentaire)
+    public function destroy($commentaireId)
     {
         //
+        $commentaireDel = Commentaire::find($commentaireId);
+        $universiteId = $commentaireDel->universite_id;
+        if (auth()->user()->is_admin) {
+            $commentaireDel->delete();
+            return redirect()->route('universites.show', $universiteId)->with('success', 'Commentaire supprimé avec succès.');
+        } else {
+            return redirect()->back()->with('error', 'Vous n\'êtes pas autorisé à supprimer ce commentaire.');
+        }
     }
 }

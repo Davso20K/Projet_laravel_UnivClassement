@@ -28,14 +28,16 @@
                 <td>{{ $critere->statut ? 'Actif' : 'Inactif' }}</td>
                 <td>
                     <div class="btn-group" role="group">
-
-                        <a href="{{ route('criteres.show', $critere->id) }}" class="btn btn-info" title="Voir les détails du critère" style="margin-right:5px">
-                            <img src="{{ asset('icones/infos.svg') }}" style="height: 20px;" />
-                        </a>
-
-                        <a href="{{ route('criteres.edit', $critere->id) }}" class="btn" title="Mettre à jour les informations de ce critère">
-                            <img src="{{ asset('icones/edit.svg') }}" style="height: 20px;" />
-                        </a>
+                        <div class="col-md-4">
+                            <a href="{{ route('criteres.show', $critere->id) }}" class="btn btn-info" title="Voir les détails du critère" style="margin-right:5px">
+                                <img src="{{ asset('icones/infos.svg') }}" style="height: 20px;" />
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ route('criteres.edit', $critere->id) }}" class="btn " title="Mettre à jour les informations de ce critère">
+                                <img src="{{ asset('icones/editer.svg') }}" style="height: 25px;" />
+                            </a>
+                        </div>
 
                         <form action="{{ route('criteres.destroy', $critere->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce critère ?');">
                             @csrf

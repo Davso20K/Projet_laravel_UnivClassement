@@ -20,18 +20,11 @@
 
 </head>
 
-<h1>Liste des universités</h1>
-@if(Auth::user()?->is_admin)
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">
-    Ajouter une université
-</button>
-@endif
-<div class="overflow-auto" style="max-height: 300px;">
+<div class="overflow-auto" style="max-height: 300px; margin-top:10px;">
     <div id="criteriaCheckboxes" data-criteres="{{ json_encode($criteres) }}">
         @if (count($criteres) > 0)
         <div class="form-group">
-            <label for="criteria">Critères de classement:</label>
+            <h5 for="criteria">Cochez des critères pour classer les universités</h5>
             <div class="form-check" style="align-content: center;">
                 <ul style="display: flex; flex-wrap: wrap;">
                     @foreach ($criteres as $critere)
@@ -51,6 +44,16 @@
         @endif
     </div>
 </div>
+<div style="display: flex; ">
+    <h3 style="margin-right: 10px;">Liste des universités</h3>
+    @if(Auth::user()?->is_admin)
+
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">
+        Ajouter une université
+    </button>
+    @endif
+</div>
+
 
 
 <div class="scrollView border  rounded">
@@ -87,7 +90,7 @@
                         @if(Auth::user()?->is_admin)
                         <div class="col-md-3">
                             <a href="{{ route('universites.edit', $universite->id) }}" class="btn btn-secondary" title="Mettre à jour les informations de cette université">
-                                <img src="{{ asset('icones/edit.svg') }}" style="height: 40px;" />
+                                <img src="{{ asset('icones/editer.svg') }}" style="height: 40px;" />
                             </a>
                         </div>
                         @if (count($criteres) > 0)

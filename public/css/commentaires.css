@@ -70,3 +70,37 @@
     margin-right: -150px;
     overflow-y: auto;
 }
+.comment {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.comment-header {
+    margin-bottom: 10px;
+}
+
+.user {
+    align-items: center;
+}
+
+.user-img {
+    border-radius: 50%;
+}
+
+.comment-actions {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.reply {
+    cursor: pointer;
+    color: #999;
+}
+
+.reply:hover {
+    color: #333;
+}

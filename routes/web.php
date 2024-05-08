@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\CritereController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotationController;
 use App\Http\Controllers\ProfileController;
@@ -11,9 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('accueil');
@@ -39,6 +38,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 //Commentaires
 Route::middleware(['auth'])->group(function () {
     Route::post('/commentaire/{universite_id}', [CommentaireController::class, 'store'])->name('commentaires.store');
+    Route::delete('/commentaire/{commentaire}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy');
 });
 // Critères
 Route::middleware(['auth', 'admin'])->group(function () {
