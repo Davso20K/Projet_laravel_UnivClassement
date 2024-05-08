@@ -113,3 +113,13 @@
     transform: translate(0);
     opacity: 1;
 }
+.scrollView {
+    max-height: 480px;
+    size: bold;
+    margin: 20px;
+    overflow-y: auto;
+}
+.fixed-image {
+    width: 350px; /* ou toute autre valeur de largeur souhaitée */
+    height: 300px; /* Maintient le rapport hauteur/largeur */
+}

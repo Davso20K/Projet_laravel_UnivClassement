@@ -6,8 +6,14 @@ const body = document.querySelector("body"),
     modeText = body.querySelector(".mode-text");
 
 toggle.addEventListener("click", () => {
+    toggle.disabled = true;
+
     sidebar.classList.toggle("close");
-    sidebar.style.width = sidebar.offsetWidth === 250 ? "50px" : "250px";
+    sidebar.style.width = sidebar.offsetWidth === 250 ? "100px" : "250px";
+    // Réactive le bouton de toggle après une courte période
+    setTimeout(() => {
+        toggle.disabled = false;
+    }, 300); //
 });
 
 searchBtn.addEventListener("click", () => {

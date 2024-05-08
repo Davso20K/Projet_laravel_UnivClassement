@@ -282,29 +282,33 @@ body.dark .switch::before {
     left: 20px;
 }
 
-.home {
+.homeSection {
     position: relative;
     top: 0;
-    top: 0;
-    left: 250px;
-    margin-left: 20px;
+    left: 250px; /* La position par défaut quand le sidebar est ouvert */
+    margin-left: 20px; /* Marge pour éviter de chevaucher le sidebar */
     height: 100vh;
-    width: calc(100% - 250px);
+    width: calc(
+        100% - 250px
+    ); /* La largeur par défaut quand le sidebar est ouvert */
     background-color: var(--body-color);
     transition: var(--tran-05);
 }
-.home .text {
+
+.sidebar.close ~ .homeSection {
+    left: 78px; /* La nouvelle position quand le sidebar est fermé */
+    width: calc(
+        100% - 78px
+    ); /* La nouvelle largeur quand le sidebar est fermé */
+}
+
+.homeSection .text {
     font-size: 30px;
     font-weight: 500;
     color: var(--text-color);
     padding: 12px 60px;
 }
 
-.sidebar.close ~ .home {
-    left: 78px;
-    height: 100vh;
-    width: calc(100% - 78px);
-}
-body.dark .home .text {
+body.dark .homeSection .text {
     color: var(--text-color);
 }

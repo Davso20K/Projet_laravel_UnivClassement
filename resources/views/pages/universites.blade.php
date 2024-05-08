@@ -19,10 +19,14 @@
 
 
 </head>
+
 <h1>Liste des universités</h1>
+@if(Auth::user()?->is_admin)
+
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUniversiteModal">
     Ajouter une université
 </button>
+@endif
 <div class="overflow-auto" style="max-height: 300px;">
     <div id="criteriaCheckboxes" data-criteres="{{ json_encode($criteres) }}">
         @if (count($criteres) > 0)
@@ -49,70 +53,69 @@
 </div>
 
 
-
-<div class="row">
-    @foreach ($universites as $key => $universite)
-    @if ($key % 4 === 0)
-</div>
-<div id="universitiesContainer" data-universities="{{ $universites->toJson() }}" class="row">
-    @endif
-    <div class="col-md-3">
-        <div class="card" style="margin-top:10px">
-            <img src="{{ asset('storage/universites_images/' . $universite->image) }}" class="card-img-top" alt="Université image">
-
-            <div class="card-body">
-                <h5 class="card-title">{{ $universite->nom }}</h5>
-                <p class="card-text">{{ $universite->description }}</p>
-                <a href="{{ $universite->site_web }}" class="card-link">{{ $universite->site_web }}</a>
-            </div>
-            <div class="card-footer">
-                <a href="{{ route('universites.show', $universite->id) }}" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                        <path d="M7.143 1.5c.97 0 1.927.18 2.833.536a13.29 13.29 0 0 1 2.361 1.237c.715.636 1.364 1.37 1.926 2.16a15.84 15.84 0 0 1 1.524 2.36c.356.714.64 1.497.835 2.333a13.29 13.29 0 0 1 .536 2.834c0 .97-.18 1.927-.536 2.833a13.29 13.29 0 0 1-1.237 2.361c-.636.715-1.37 1.364-2.16 1.926a15.84 15.84 0 0 1-2.36 1.524c-.714.356-1.497.64-2.333.835a13.29 13.29 0 0 1-2.834.536zM8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-                    </svg>
-                </a>
-                @if(Auth::user())
-
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="{{ $universite->id }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
-                        <path d="M7.868.235a.5.5 0 0 1 .264 0l1.723.286a.5.5 0 0 1 .276.148l.824.823a.5.5 0 0 1 .149.276l.286 1.723a.5.5 0 0 1-.073.353l-1.187 1.49a.5.5 0 0 1-.312.164l-1.563.28a1.5 1.5 0 0 1-1.11-.44l-.74-.739a.5.5 0 0 1-.138-.403L5.66 4.418a1.5 1.5 0 0 1 .21-1.042l.823-1.097a.5.5 0 0 1 .353-.186zM8 12.5a.5.5 0 0 1-.377-.171l-1.454-1.663a.5.5 0 0 1-.094-.301L6.07 7.398a.5.5 0 0 1 .144-.34l1.187-1.49a.5.5 0 0 1 .312-.164l1.563-.28a1.5 1.5 0 0 1 1.11.44l.74.739a.5.5 0 0 1 .138.403l-.286 1.723a.5.5 0 0 1-.149.276l-.824.823a.5.5 0 0 1-.276.148l-1.723.286a.5.5 0 0 1-.264 0zM3.5 14a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zm10 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zM2 14.5a.5.5 0 0 1-.5-.5V2.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H2z" />
-                    </svg>
-                </button>
-                @if(Auth::user()?->is_admin)
-
-
-                <a href="{{ route('universites.edit', $universite->id) }}" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                        <path d="M13.293 0.293a1 1 0 0 1 1.414 0l1 1a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-.39.242l-4 1a1 1 0 0 1-1.242-1.242l1-4a1 1 0 0 1 .242-.39l10-10zM12 2l1.586 1.586-9.172 9.172-.086.329.329-.086 9.172-9.172L14 3.414 12.586 2H12zm-3.086 10.5l-1.75 1.75a.5.5 0 0 1-.707 0l-6-6a.5.5 0 0 1 0-.707l1.75-1.75L9.914 11.5z" />
-                    </svg>
-                </a>
-
-                @if (count($criteres) > 0)
-                <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                            <path d="M0 1.5A.5.5 0 0 1 .5 1h15a.5.5 0 0 1 .5.5V3h-16V1.5zm1-1A1.5 1.5 0 0 0 .5 1v.5h15V1a1.5 1.5 0 0 0-1.5-1.5H1zM3.879 13a2 2 0 0 1-1.975-1.65L1.5 5H14.5l-.404 6.35A2 2 0 0 1 12.12 13H3.88zm-1.732-.5a1 1 0 0 0 1.007.832h8.845a1 1 0 0 0 1.007-.832L13.096 5H2.904l-.757 7.5z" />
-                        </svg>
-                    </button>
-                </form>
-                @endif
-                @endif
-                @else
-                <button type="button" class="btn btn-primary">
-                    <a href="{{route('login')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
-                            <path d="M7.868.235a.5.5 0 0 1 .264 0l1.723.286a.5.5 0 0 1 .276.148l.824.823a.5.5 0 0 1 .149.276l.286 1.723a.5.5 0 0 1-.073.353l-1.187 1.49a.5.5 0 0 1-.312.164l-1.563.28a1.5 1.5 0 0 1-1.11-.44l-.74-.739a.5.5 0 0 1-.138-.403L5.66 4.418a1.5 1.5 0 0 1 .21-1.042l.823-1.097a.5.5 0 0 1 .353-.186zM8 12.5a.5.5 0 0 1-.377-.171l-1.454-1.663a.5.5 0 0 1-.094-.301L6.07 7.398a.5.5 0 0 1 .144-.34l1.187-1.49a.5.5 0 0 1 .312-.164l1.563-.28a1.5 1.5 0 0 1 1.11.44l.74.739a.5.5 0 0 1 .138.403l-.286 1.723a.5.5 0 0 1-.149.276l-.824.823a.5.5 0 0 1-.276.148l-1.723.286a.5.5 0 0 1-.264 0zM3.5 14a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zm10 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2zM2 14.5a.5.5 0 0 1-.5-.5V2.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H2z" />
-                        </svg>
-                    </a>
-                </button>
-                @endif
+<div class="scrollView border  rounded">
+    <div class="row" id="universitiesContainer" data-universities="{{ $universites->toJson() }}">
+        @foreach ($universites as $key => $universite)
+        <div class="col-md-3" data-key="{{ $key }}">
+            <div class="card fixed-height" style="margin-top: 10px;">
+                <img src="{{ asset('storage/universites_images/' . $universite->image) }}" class="card-img-top fixed-image" alt="Université image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $universite->nom }}</h5>
+                    <p class="card-text">{{ $universite->description }}</p>
+                    <a href="{{ $universite->site_web }}" class="card-link">{{ $universite->site_web }}</a>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <a href="{{ route('universites.show', $universite->id) }}" class="btn btn-primary" title="Voir les détails de cette université">
+                                <img src="{{ asset('icones/infos.svg') }}" style="height: 40px;" />
+                            </a>
+                        </div>
+                        @if(Auth::user())
+                        <div class="col-md-3">
+                            <button type="button" title="Cliquez pour noter cette université" class="btn btn-warning" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="{{ $universite->id }}">
+                                <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                            </button>
+                        </div>
+                        @else
+                        <div class="col-md-3">
+                            <a href="{{ route('login') }}" class="btn btn-warning" title="Cliquez pour noter cette université">
+                                <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                            </a>
+                        </div>
+                        @endif
+                        @if(Auth::user()?->is_admin)
+                        <div class="col-md-3">
+                            <a href="{{ route('universites.edit', $universite->id) }}" class="btn btn-secondary" title="Mettre à jour les informations de cette université">
+                                <img src="{{ asset('icones/edit.svg') }}" style="height: 40px;" />
+                            </a>
+                        </div>
+                        @if (count($criteres) > 0)
+                        <div class="col-md-3">
+                            <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" title="Cliquez pour supprimer cette université">
+                                    <img src="{{ asset('icones/supprimer.svg') }}" style="height: 40px;" />
+                                </button>
+                            </form>
+                        </div>
+                        @endif
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
+        @if (($key + 1) % 4 === 0 || $key === count($universites) - 1)
     </div>
-    @endforeach
+    @if ($key !== count($universites) - 1)
+    <div class="row" id="universitiesContainer">
+        @endif
+        @endif
+        @endforeach
+    </div>
 </div>
+
 
 
 
@@ -243,9 +246,6 @@
     </div>
 </div>
 
-@php
-$universitesJson = json_encode($universites);
-@endphp
 
 <script>
     $(document).ready(function() {
@@ -308,7 +308,7 @@ $universitesJson = json_encode($universites);
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const universitiesContainer = document.getElementById('universitiesContainer');
-        const universities = JSON.parse(universitiesContainer.dataset.universities);
+        let universities = JSON.parse(universitiesContainer.dataset.universities);
 
         const criteriaCheckboxes = document.getElementById('criteriaCheckboxes');
         let selectedCriteriaIds = [];
@@ -333,83 +333,100 @@ $universitesJson = json_encode($universites);
                 return university;
             }).filter(university => university.averageRating > 0);
 
-            renderUniversities(filteredUniversities);
+            updateUniversitiesOrder(filteredUniversities);
         });
+
+        function updateUniversitiesOrder(newOrder) {
+            universities = newOrder; // Mise à jour directe des universités avec le nouvel ordre
+            while (universitiesContainer.firstChild) {
+                universitiesContainer.removeChild(universitiesContainer.firstChild);
+            }
+            renderUniversities(universities);
+        }
 
         function renderUniversities(universities) {
             universitiesContainer.innerHTML = '';
-
+            const imagePath = "{{ asset('storage/universites_images/') }}";
             universities.sort((a, b) => {
                 return b.averageRating - a.averageRating; // Tri par ordre décroissant
             });
 
+            let row = document.createElement('div');
+            row.classList.add('row');
+
             universities.forEach((university, index) => {
                 const card = document.createElement('div');
-                card.classList.add('col-md-4', 'mb-4');
+                card.classList.add('col-md-3', 'mb-4');
+                const rank = index + 1;
                 card.innerHTML = `
-                <div class="card" style="margin-top: 10px;">
-                    <div class="card-body">
-                        <h5 class="card-title">${index + 1}. ${university.nom}</h5>
-                        <p class="card-text">${university.description}</p>
-                        <a href="${university.site_web}" class="card-link">${university.site_web}</a>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ route('universites.show', $universite->id) }}" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                <path d="M7.143 1.5c.97 0 1.927.18 2.833.536a13.29 13.29 0 0 1 2.361 1.237c.715.636 1.364 1.37 1.926 2.16a15.84 15.84 0 0 1 1.524 2.36c.356.714.64 1.497.835 2.333a13.29 13.29 0 0 1 .536 2.834c0 .97-.18 1.927-.536 2.833a13.29 13.29 0 0 1-1.237 2.361c-.636.715-1.37 1.364-2.16 1.926a15.84 15.84 0 0 1-2.36 1.524c-.714.356-1.497.64-2.333.835a13.29 13.29 0 0 1-2.834.536zM8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-                            </svg>
-                        </a>
-                        @auth
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
-                                <path d="M7.868.235a.5.5 0 0 1 .264 0l1.723.286a.5.5 0 0 1 .276.148l.824.823a.5.5 0 0 1 .149.276l.286 1.723a.5.5 0 0 1-.073.353l-1.187 1.49a.5.5 0 0 1-.312.164l-1.563.28a1.5 1.5 0 0 1-1.11-.44l-.74-.739a.5.5 0 0 1-.138-.403L5.66 4.418a1.5 1.5 0 0 1 .21-1.042l.823-1.097a.5.5 0 0 1 .353-.186zM8 12.5a.5.5 0 0 1-.377-.171l-1.454-1.663a.5.5 0 0 1-.094-.301L6.07 7.398a.5.5 0 0 1 .144-.34l1.187-1.49a.5.5 0 0 1 .312-.164l1.563-.28a1.5 1.5 0 0 1 1.11.44l.74.739a.5.5 0 0 1 .138.403l-.286 1.723a.5.5 0 0 1-.149.276l-.824.823a.5.5 0 0 1-.276.148l-1.723.286a.5.5 0 0 1-.264 0zM3.879 13a2 2 0 0 1-1.975-1.65L1.5 5H14.5l-.404 6.35A2 2 0 0 1 12.12 13H3.88zm-1.732-.5a1 1 0 0 0 1.007.832h8.845a1 1 0 0 0 1.007-.832L13.096 5H2.904l-.757 7.5z" />
-                            </svg>
-                        </button>
-
-                        <a href="{{ route('universites.edit', $universite->id) }}" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                <path d="M13.293 0.293a1 1 0 0 1 1.414 0l1 1a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-.39.242l-4 1a1 1 0 0 1-1.242-1.242l1-4a1 1 0 0 1 .242-.39l10-10zM12 2l1.586 1.586-9.172 9.172-.086.329.329-.086 9.172-9.172L14 3.414 12.586 2H12zm-3.086 10.5l-1.75 1.75a.5.5 0 0 1-.707 0l-6-6a.5.5 0 0 1 0-.707l1.75-1.75L9.914 11.5z" />
-                            </svg>
-                        </a>
-                        @if (count($criteres) > 0)
-                        <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M0 1.5A.5.5 0 0 1 .5 1h15a.5.5 0 0 1 .5.5V3h-16V1.5zm1-1A1.5 1.5 0 0 0 .5 1v.5h15V1a1.5 1.5 0 0 0-1.5-1.5H1zM3.879 13a2 2 0 0 1-1.975-1.65L1.5 5H14.5l-.404 6.35A2 2 0 0 1 12.12 13H3.88zm-1.732-.5a1 1 0 0 0 1.007.832h8.845a1 1 0 0 0 1.007-.832L13.096 5H2.904l-.757 7.5z" />
-                                </svg>
-                            </button>
-                        </form>
-                        @endif
-                        @endauth
-                    </div>
+    <div class="card fixed-height" style="margin-top: 10px;">
+        <img src="${imagePath}/${university.image}" class="card-img-top fixed-image" alt="Université image">
+        <div class="card-body">
+            <h5 class="card-title">${rank}. ${university.nom}</h5>
+            <p class="card-text">${university.description}</p>
+            <a href="${university.site_web}" class="card-link">${university.site_web}</a>
+        </div>
+        <div class="card-footer">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <a href="/universite/${university.id}" class="btn btn-primary">
+                        <img src="{{ asset('icones/infos.svg') }}" style="height: 40px;" />
+                    </a>
                 </div>
-            `;
-                universitiesContainer.appendChild(card);
+                @if(Auth::user())
+                <div class="col-md-3">
+                    <button type="button" title="Cliquez pour noter cette université" class="btn btn-warning" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
+                        <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                    </button>
+                </div>
+                @else
+                <div class="col-md-3">
+                    <a href="{{ route('login') }}" class="btn btn-warning" title="Cliquez pour noter cette université">
+                        <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                    </a>
+                </div>
+                @endif
+                @if(Auth::user()?->is_admin)
+                <div class="col-md-3">
+                    <a href="/universite/${university.id}/edit" class="btn btn-secondary" title="Mettre à jour les informations de cette université">
+                        <img src="{{ asset('icones/edit.svg') }}" style="height: 40px;" />
+                    </a>
+                </div>
+                @if (count($criteres) > 0)
+                <div class="col-md-3">
+                    <form action="/universitedes/${university.id}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" title="Cliquez pour supprimer cette université">
+                            <img src="{{ asset('icones/supprimer.svg') }}" style="height: 40px;" />
+                        </button>
+                    </form>
+                </div>
+                @endif
+                @endif
+            </div>
+        </div>
+        <div class="card-footer">
+            <p class="rank">Rang: ${rank}</p>
+            <p class="average">Moyenne: ${university.averageRating}</p>
+        </div>
+    </div>
+    `;
+
+                row.appendChild(card);
+
+                if ((index + 1) % 4 === 0 || index === universities.length - 1) {
+                    universitiesContainer.appendChild(row);
+                    row = document.createElement('div');
+                    row.classList.add('row');
+                }
             });
         }
+
     });
-
-    function addAverageHeader(thead) {
-        const existingAverageTh = thead.querySelector('.ranking-score');
-        if (!existingAverageTh) {
-            const averageTh = document.createElement('th');
-            averageTh.classList.add('ranking-score');
-            averageTh.textContent = 'Moyenne';
-
-            const actionsTh = thead.querySelector('th:nth-child(4)');
-            actionsTh.parentNode.insertBefore(averageTh, actionsTh.nextSibling);
-        }
-    }
-
-    function removeAverageHeader(thead) {
-        const existingAverageTh = thead.querySelector('.ranking-score');
-        if (existingAverageTh) {
-            existingAverageTh.remove();
-        }
-    }
 </script>
+
+
 
 
 @endsection

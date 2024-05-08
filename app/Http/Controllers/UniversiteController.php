@@ -48,10 +48,12 @@ class UniversiteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2048',
+
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2048',
         ]);
 
-        $imageName = null;
+        $imageName = 'univ_default.jpeg';
+
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('public/universites_images');
             $imageName = basename($imagePath);
@@ -73,6 +75,7 @@ class UniversiteController extends Controller
 
         return redirect()->route('universites.index')->with('success', 'Université ajoutée avec succès.');
     }
+
 
     /**
      * Display the specified resource.

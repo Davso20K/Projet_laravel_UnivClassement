@@ -4,36 +4,49 @@
 
 
 <h1>Liste des critères</h1>
+@if(Auth::user()?->is_admin)
+
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCriteriaModal">
     Ajouter un critere
 </button>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Libellé</th>
-            <th>Description</th>
-            <th>Statut</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($criteres as $critere)
-        <tr>
-            <td>{{ $critere->libelle }}</td>
-            <td>{{ $critere->description }}</td>
-            <td>{{ $critere->statut ? 'Actif' : 'Inactif' }}</td>
-            <td>
-                <a href="{{ route('criteres.show', $critere->id) }}">Details</a>
-                <form action="{{ route('criteres.destroy', $critere->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce critère ?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Supprimer</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+@endif
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Libellé</th>
+                <th scope="col" style="width: 800px;">Description</th>
+                <th scope="col">Statut</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($criteres as $critere)
+            <tr>
+                <td>{{ $critere->libelle }}</td>
+                <td>{{ $critere->description }}</td>
+                <td>{{ $critere->statut ? 'Actif' : 'Inactif' }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+
+                        <a href="{{ route('criteres.show', $critere->id) }}" class="btn btn-info" title="Voir les détails du critère" style="margin-right:5px">
+                            <img src="{{ asset('icones/infos.svg') }}" style="height: 20px;" />
+                        </a>
+                        <form action="{{ route('criteres.destroy', $critere->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce critère ?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <img src="{{ asset('icones/supprimer.svg') }}" style="height: 20px;" />
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 <!-- Modal d'ajout d'un critère -->
 <div class="modal fade" id="addCriteriaModal" tabindex="-1" role="dialog" aria-labelledby="addCriteriaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

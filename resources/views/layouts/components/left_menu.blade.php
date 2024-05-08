@@ -13,93 +13,96 @@
 
 </head>
 
-<div class="row flex-nowrap">
-    <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <!--<img src="logo.png" alt="">-->
-                </span>
 
-            </div>
-            <i class='bx bx-chevron-right toggle'></i>
-        </header>
-        <div class="menu-bar">
-            <div class="menu">
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <!--<img src="logo.png" alt="">-->
+            </span>
 
-
-                <ul class="menu-links">
-
-                    @if(Auth::user()?->is_admin)
-
-
-                    <div class="">
-                        <li class="nav-link">
-                            <a href="{{route('dashboard')}}">
-                                <i class='bx bx-home-alt icon' style="margin-left: -25px;"></i>
-                                <span class="text nav-text">Dashboard</span>
-                            </a>
-                        </li>
-                    </div>
-                    @endif
-                    <div class="">
-
-                        <li class="nav-link">
-                            <a href="{{route('accueil')}}">
-                                <i class='bx bx-bar-chart-alt-2 icon' style="margin-left: -25px;"></i>
-                                <span class="text nav-text">accueil</span>
-                            </a>
-                        </li>
-                    </div>
-                    <div class="">
-
-                        <li class="nav-link">
-                            <a href="{{route('universites.index')}}">
-                                <i class='bx bx-bar-chart-alt-2 icon' style="margin-left: -25px;"></i>
-                                <span class="text nav-text">Universités</span>
-                            </a>
-                        </li>
-                    </div>
-                    @auth
-                    @if(Auth::user()?->is_admin)
-
-                    <div class="">
-
-                        <li class="nav-link">
-                            <a href="{{route('criteres.index')}}">
-                                <i class='bx bx-bell icon' style="margin-left: -25px;"></i>
-                                <span class="text nav-text">Critères</span>
-                            </a>
-                        </li>
-                    </div>
-                    <div class="">
-
-                        <li class="nav-link">
-                            <a href="{{route('utilisateurs.index')}}">
-                                <i class='bx bx-pie-chart-alt icon' style="margin-left: -25px;"></i>
-                                <span class="text nav-text">Utilisateurs</span>
-                            </a>
-                        </li>
-
-                    </div>
-                    @endauth
-                    @endif
-
-                </ul>
-
-
-
-            </div>
         </div>
-    </nav>
-    <section class="home">
-        @include('layouts.navigation')
-
-        @yield('content')
-        @include('layouts.components.footer')
-
-    </section>
+        <i class='bx bx-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+        <div class="menu">
 
 
-    <script src="{{asset('js/script.js')}}"></script>
-</div>
+            <ul class="menu-links">
+
+                @if(Auth::user()?->is_admin)
+
+
+                <div class="">
+                    <li class="nav-link">
+                        <a href="{{route('dashboard')}}">
+                            <img src="{{ asset('icones/dashboard.svg') }}" title="Dashboard" style="height: 30px;margin-left: -15px;margin-right:10px;" />
+
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                </div>
+                @endif
+                <div class="">
+
+                    <li class="nav-link">
+                        <a href="{{route('accueil')}}">
+                            <img src="{{ asset('icones/accueil.svg') }}" title="Accueil" style="height: 30px;margin-left: -15px;margin-right:10px;" />
+
+                            <span class="text nav-text">accueil</span>
+                        </a>
+                    </li>
+                </div>
+                <div class="">
+
+                    <li class="nav-link">
+                        <a href="{{route('universites.index')}}">
+                            <!-- <i class='bx bx-bar-chart-alt-2 icon' style="margin-left: -25px;"></i> -->
+                            <img src="{{ asset('icones/universites.svg') }}" title="Universités" style="height: 30px;margin-left: -15px;margin-right:10px;" />
+
+                            <span class="text nav-text">Universités</span>
+                        </a>
+                    </li>
+                </div>
+                @auth
+                @if(Auth::user()?->is_admin)
+
+                <div class="">
+
+                    <li class="nav-link">
+                        <a href="{{route('criteres.index')}}">
+                            <img src="{{ asset('icones/criteres.svg') }}" title="Critères" style="height: 30px;margin-left: -15px;margin-right:10px;" />
+                            <span class="text nav-text">Critères</span>
+                        </a>
+                    </li>
+                </div>
+                <div class="">
+
+                    <li class="nav-link">
+                        <a href="{{route('utilisateurs.index')}}">
+                            <img src="{{ asset('icones/users.svg') }}" title="Utilisateurs" style="height: 30px;margin-left: -15px;margin-right:10px;" />
+                            <span class="text nav-text">Utilisateurs</span>
+                        </a>
+                    </li>
+
+                </div>
+                @endauth
+                @endif
+
+            </ul>
+
+
+
+        </div>
+    </div>
+</nav>
+<section class="homeSection ">
+    @include('layouts.navigation')
+
+    @yield('content')
+    @include('layouts.components.footer')
+
+</section>
+
+
+<script src="{{asset('js/script.js')}}"></script>

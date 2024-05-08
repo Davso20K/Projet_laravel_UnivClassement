@@ -57,7 +57,11 @@ class UserController extends Controller
     public function update(Request $request, $userId)
     {
         //
-        echo ($userId);
+    }
+    public function desactiver(Request $request, $userId)
+    {
+        //
+        // echo ($userId);
         $Utilisateur = User::find($userId);
 
 
@@ -65,6 +69,18 @@ class UserController extends Controller
         $Utilisateur->est_actif = false;
         $Utilisateur->save();
         return redirect()->route('utilisateurs.index')->with('success', 'utilisateur désactivé avec succès');
+    }
+    public function activer(Request $request, $userId)
+    {
+        //
+        // echo ($userId);
+        $Utilisateur = User::find($userId);
+
+
+
+        $Utilisateur->est_actif = true;
+        $Utilisateur->save();
+        return redirect()->route('utilisateurs.index')->with('success', 'utilisateur activé avec succès');
     }
 
     /**

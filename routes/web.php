@@ -34,7 +34,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/universite', [UniversiteController::class, 'store'])->name('universites.store');
     Route::get('/universite/{universite}/edit', [UniversiteController::class, 'edit'])->name('universites.edit');
     Route::put('/universite/{universite}', [UniversiteController::class, 'update'])->name('universites.update');
-    Route::delete('/universite/{universite}', [UniversiteController::class, 'destroy'])->name('universites.destroy');
+    Route::delete('/universitedes/{universite}', [UniversiteController::class, 'destroy'])->name('universites.destroy');
 });
 //Commentaires
 Route::middleware(['auth'])->group(function () {
@@ -58,7 +58,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/utilisateur', [UserController::class, 'store'])->name('utilisateurs.store');
     Route::get('/utilisateur/{utilisateur}', [UserController::class, 'show'])->name('utilisateurs.show');
     Route::get('/utilisateur/{utilisateur}/edit', [UserController::class, 'edit'])->name('utilisateurs.edit');
-    Route::get('/utilisateur/{utilisateur}/desactiver', [UserController::class, 'update'])->name('utilisateurs.update');
+    Route::get('/utilisateur/{utilisateur}/desactiver', [UserController::class, 'desactiver'])->name('utilisateurs.desactiver');
+    Route::get('/utilisateur/{utilisateur}/activer', [UserController::class, 'activer'])->name('utilisateurs.activer');
     Route::delete('/utilisateur/{utilisateur}', [UserController::class, 'destroy'])->name('utilisateurs.destroy');
 });
 //Notation
