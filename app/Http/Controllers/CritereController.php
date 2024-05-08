@@ -14,7 +14,7 @@ class CritereController extends Controller
     {
         //
         $criteres = Critere::all();
-        return view('pages.criteres', compact('criteres'));
+        return view('pages.criteres.criteres', compact('criteres'));
     }
 
     /**
@@ -52,7 +52,7 @@ class CritereController extends Controller
     public function show(Critere $critere)
     {
         //
-        return view('pages.critereDetail', compact('critere'));
+        return view('pages.criteres.critereDetail', compact('critere'));
     }
 
     /**
@@ -61,15 +61,31 @@ class CritereController extends Controller
     public function edit(Critere $critere)
     {
         //
+        return view('pages.criteres.critereEdit', compact('critere'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Critere $critere)
+    public function update(Request $request, $id)
     {
-        //
+        $critere = Critere::findOrFail($id);
+
+        $request->validate([
+            'libelle' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'statut' => 'required|boolean',
+        ]);
+
+        $critere->libelle = $request->input('libelle');
+        $critere->description = $request->input('description');
+        $critere->statut = $request->input('statut');
+
+        $critere->save();
+
+        return redirect()->route('criteres.index')->with('success', 'Critère mis à jour avec succès.');
     }
+
 
     /**
      * Remove the specified resource from storage.

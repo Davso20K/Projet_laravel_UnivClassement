@@ -32,7 +32,7 @@ class UniversiteController extends Controller
             }
         }
 
-        return view('pages.universites', compact('universites', 'criteres'));
+        return view('pages.universites.universites', compact('universites', 'criteres'));
     }
 
     /**
@@ -88,7 +88,7 @@ class UniversiteController extends Controller
             ->join('users', 'users.id', '=', 'commentaires.utilisateur_id')
             ->select('commentaires.*', 'users.name as auteur')
             ->get();
-        return view('pages.universiteDetail', compact('universite', 'commentaires'));
+        return view('pages.universites.universiteDetail', compact('universite', 'commentaires'));
     }
 
     /**
@@ -97,7 +97,7 @@ class UniversiteController extends Controller
     public function edit(Universite $universite)
     {
         //
-        return view('pages.universiteEdit', compact('universite'));
+        return view('pages.universites.universiteEdit', compact('universite'));
     }
 
     /**
@@ -107,10 +107,10 @@ class UniversiteController extends Controller
     {
         $universite = Universite::findOrFail($id);
 
-        // $request->validate([
-        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2048',
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2048',
 
-        // ]);
+        ]);
 
         // Sauvegarder l'ancienne image
         $ancienneImage = $universite->image;

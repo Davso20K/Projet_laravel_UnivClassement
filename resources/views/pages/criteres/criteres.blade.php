@@ -32,6 +32,11 @@
                         <a href="{{ route('criteres.show', $critere->id) }}" class="btn btn-info" title="Voir les détails du critère" style="margin-right:5px">
                             <img src="{{ asset('icones/infos.svg') }}" style="height: 20px;" />
                         </a>
+
+                        <a href="{{ route('criteres.edit', $critere->id) }}" class="btn" title="Mettre à jour les informations de ce critère">
+                            <img src="{{ asset('icones/edit.svg') }}" style="height: 20px;" />
+                        </a>
+
                         <form action="{{ route('criteres.destroy', $critere->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce critère ?');">
                             @csrf
                             @method('DELETE')

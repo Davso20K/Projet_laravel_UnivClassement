@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         //
         $utilisateurs = User::all();
-        return view('pages.utilisateurs', compact('utilisateurs'));
+        return view('pages.utilisateurs.utilisateurs', compact('utilisateurs'));
     }
 
     /**
@@ -40,7 +40,7 @@ class UserController extends Controller
     public function show(User $utilisateur)
     {
         //
-        return view('pages.utilisateurDetail', compact('utilisateur'));
+        return view('pages.utilisateurs.utilisateurDetail', compact('utilisateur'));
     }
 
     /**
