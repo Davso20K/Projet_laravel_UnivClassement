@@ -16,7 +16,7 @@ class UniversiteController extends Controller
     public function index(Request $request)
     {
         $universites = Universite::all();
-        $criteres = Critere::all();
+        $criteres = Critere::where('statut', 1)->get();
 
         // Calcul des moyennes de notation pour chaque critère et chaque université
         foreach ($universites as $universite) {

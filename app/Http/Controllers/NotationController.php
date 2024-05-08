@@ -100,7 +100,7 @@ class NotationController extends Controller
                 $notesByCriteria[$note->critere_id] = $note->valeur;
             }
 
-            $criteres = Critere::all();
+            $criteres = Critere::where('statut', 1)->get();
 
             return response()->json(['notesByCriteria' => $notesByCriteria, 'criteres' => $criteres]);
         } else {
