@@ -51,4 +51,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Commentaire::class, 'utilisateur_id');
     }
+    public function notations()
+    {
+        return $this->hasMany(Notation::class, 'utilisateur_id');
+    }
 }

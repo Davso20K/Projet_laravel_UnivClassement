@@ -31,6 +31,10 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+        $date_naiss = $request->input('date_naiss');
+        if (!empty($date_naiss)) {
+            $request->user()->date_naiss = $date_naiss;
+        }
 
         $request->user()->save();
 

@@ -16,7 +16,7 @@
                 <!-- <div style="width: 30px;"><i class="fa fa-map-marker-alt text-primary"></i></div> -->
                 <div style="margin-left: 10px;">
                     <h5 style="margin: 0; color: white;">A propos</h5>
-                    <p style="margin: 0;"><a href='afomaledrank@gmail.com'>Cliquez</p>
+                    <p style="margin: 0;"><a href='{{route('accueil')}}'>Cliquez</p>
                 </div>
             </div>
 

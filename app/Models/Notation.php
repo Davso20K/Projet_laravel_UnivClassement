@@ -17,4 +17,8 @@ class Notation extends Model
     {
         return $this->belongsTo(Universite::class, 'id', 'universite_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'utilisateur_id');
+    }
 }

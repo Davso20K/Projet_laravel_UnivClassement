@@ -17,7 +17,7 @@ class Admin
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()->is_admin != 1) {
-            return redirect()->route('universites.index');
+            return redirect()->intended(route('universites.index'));
         }
         return $next($request);
     }

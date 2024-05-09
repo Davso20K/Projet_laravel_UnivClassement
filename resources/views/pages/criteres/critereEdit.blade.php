@@ -30,7 +30,7 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button type="submit" style="margin-top: 15px;" class="btn btn-primary">Enregistrer</button>
                     </form>
                 </div>
             </div>

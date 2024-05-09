@@ -67,7 +67,7 @@
                             </span>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <button style="margin-top: 15px;" type="submit" class="btn btn-primary">Enregistrer</button>
                     </form>
                 </div>
             </div>

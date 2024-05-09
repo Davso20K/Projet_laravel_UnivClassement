@@ -22,6 +22,16 @@
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
+        <div class="form-group">
+            <label for="date_naiss">Date de naissance</label>
+            <input type="date" class="form-control" id="date_naiss" name="date_naiss" value="{{ old('date_naiss', $user->date_naiss ? \Carbon\Carbon::parse($user->date_naiss)->format('Y-m-d') : '') }}" required>
+            @error('date_naiss')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+
+
 
         <div>
             <x-input-label for="email" :value="__('Email')" />

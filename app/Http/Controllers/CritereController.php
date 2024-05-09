@@ -78,7 +78,7 @@ class CritereController extends Controller
 
     public function destroy(Critere $critere)
     {
-
+        $critere->notations()->delete();
         $critere->delete();
         return redirect()->route('criteres.index')->with('success', 'Critère supprimée avec succès.');
     }

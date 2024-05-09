@@ -97,7 +97,7 @@
                                         <div class="comment-content">
                                             <p>{{ $commentaire->contenu }}</p>
                                         </div>
-                                        @if(Auth::user()->is_admin)
+                                        @if(Auth::user()?->is_admin)
                                         <div class="comment-actions d-flex justify-content-between mt-2 align-items-center">
                                             <form action="{{ route('commentaires.destroy', $commentaire->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
                                                 @csrf

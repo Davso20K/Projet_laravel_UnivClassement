@@ -54,9 +54,81 @@
     @endif
 </div>
 
+<div class="scrollView border rounded" data-universities="{{ $universites->toJson() }}">
+    @php
+    $universitiesCount = count($universites);
+    $rowsCount = ceil($universitiesCount / 4);
+    $index = 0;
+    @endphp
+
+    @for ($i = 0; $i < $rowsCount; $i++) <div class="row">
+        @for ($j = 0; $j < 4 && $index < $universitiesCount; $j++) @php $universite=$universites[$index]; @endphp <div class="col-md-3" data-key="{{ $index }}">
+            <div class="card fixed-height" style="margin-top: 10px;">
+                <img src="{{ asset('storage/universites_images/' . $universite->image) }}" class="card-img-top fixed-image" alt="Université image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $universite->nom }}</h5>
+                    <div class="overflow-auto" style="max-height: 50px;">
+                        <p class="card-text">{{ $universite->description }}</p>
+                    </div>
+                    <div class="overflow-auto" style="max-height: 35px;">
+                        <a href="{{ $universite->site_web }}" class="card-link">{{ $universite->site_web }}</a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <a href="{{ route('universites.show', $universite->id) }}" class="btn btn-primary" title="Voir les détails de cette université">
+                                <img src="{{ asset('icones/infos.svg') }}" style="height: 40px;" />
+                            </a>
+                        </div>
+                        @if(Auth::user())
+                        <div class="col-md-3">
+                            <button type="button" title="Cliquez pour noter cette université" class="btn btn-warning" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="{{ $universite->id }}">
+                                <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                            </button>
+                        </div>
+                        @else
+                        <div class="col-md-3">
+                            <a href="{{ route('login') }}" class="btn btn-warning" title="Cliquez pour noter cette université">
+                                <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                            </a>
+                        </div>
+                        @endif
+                        @if(Auth::user()?->is_admin)
+                        <div class="col-md-3">
+                            <a href="{{ route('universites.edit', $universite->id) }}" class="btn btn-secondary" title="Mettre à jour les informations de cette université">
+                                <img src="{{ asset('icones/editer.svg') }}" style="height: 40px;" />
+                            </a>
+                        </div>
+                        @if (count($criteres) > 0)
+                        <div class="col-md-3">
+                            <form action="{{ route('universites.destroy', $universite->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" title="Cliquez pour supprimer cette université">
+                                    <img src="{{ asset('icones/supprimer.svg') }}" style="height: 40px;" />
+                                </button>
+                            </form>
+                        </div>
+                        @endif
+                        @endif
+                    </div>
+                </div>
+            </div>
+</div>
+@php
+$index++;
+@endphp
+@endfor
+</div>
+@endfor
+</div>
 
 
-<div class="scrollView border  rounded">
+
+<!-- 
+
+<div class="scrollView border rounded">
     <div class="row" id="universitiesContainer" data-universities="{{ $universites->toJson() }}">
         @foreach ($universites as $key => $universite)
         <div class="col-md-3" data-key="{{ $key }}">
@@ -64,8 +136,12 @@
                 <img src="{{ asset('storage/universites_images/' . $universite->image) }}" class="card-img-top fixed-image" alt="Université image">
                 <div class="card-body">
                     <h5 class="card-title">{{ $universite->nom }}</h5>
-                    <p class="card-text">{{ $universite->description }}</p>
-                    <a href="{{ $universite->site_web }}" class="card-link">{{ $universite->site_web }}</a>
+                    <div class="overflow-auto" style="max-height: 50px;">
+                        <p class="card-text">{{ $universite->description }}</p>
+                    </div>
+                    <div class="overflow-auto" style="max-height: 35px;">
+                        <a href="{{ $universite->site_web }}" class="card-link">{{ $universite->site_web }}</a>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <div class="form-group row">
@@ -118,6 +194,7 @@
         @endforeach
     </div>
 </div>
+ -->
 
 
 
@@ -310,126 +387,128 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const universitiesContainer = document.getElementById('universitiesContainer');
-        let universities = JSON.parse(universitiesContainer.dataset.universities);
+        const checkboxes = document.querySelectorAll('input[name="criteria[]"]');
+        const universities = JSON.parse(document.querySelector('.scrollView').getAttribute('data-universities'));
 
-        const criteriaCheckboxes = document.getElementById('criteriaCheckboxes');
-        let selectedCriteriaIds = [];
-
-        criteriaCheckboxes.addEventListener('change', function() {
-            selectedCriteriaIds = Array.from(criteriaCheckboxes.querySelectorAll('input[type="checkbox"]:checked'))
+        function updateUniversities() {
+            const selectedCriteria = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
                 .map(checkbox => parseInt(checkbox.value));
 
-            const filteredUniversities = universities.map(university => {
-                let totalRating = 0;
-                let totalCriteria = 0;
-
-                selectedCriteriaIds.forEach(criterionId => {
-                    const averageRating = university[`average_${criterionId}`];
-                    if (averageRating > 0) {
-                        totalRating += averageRating;
-                        totalCriteria++;
-                    }
+            const filteredUniversities = universities.filter(university => {
+                return selectedCriteria.every(criterionId => {
+                    const average = university['average_' + criterionId];
+                    return average !== undefined && average !== null;
                 });
+            });
 
-                university.averageRating = totalCriteria > 0 ? totalRating / totalCriteria : 0;
-                return university;
-            }).filter(university => university.averageRating > 0);
+            filteredUniversities.sort((a, b) => {
+                const aAverage = selectedCriteria.reduce((acc, criterionId) => acc + a['average_' + criterionId], 0) / selectedCriteria.length;
+                const bAverage = selectedCriteria.reduce((acc, criterionId) => acc + b['average_' + criterionId], 0) / selectedCriteria.length;
+                return bAverage - aAverage;
+            });
 
-            updateUniversitiesOrder(filteredUniversities);
+            displayUniversities(filteredUniversities, selectedCriteria);
+        }
+
+        function displayUniversities(universities, selectedCriteria) {
+            const container = document.querySelector('.scrollView');
+            container.innerHTML = '';
+            const imagePath = "{{ asset('storage/universites_images/') }}";
+
+            // Créer une boucle pour générer les div .row
+            for (let i = 0; i < universities.length; i += 4) {
+                const row = document.createElement('div');
+                row.classList.add('row');
+                container.appendChild(row);
+
+                // Ajouter les cards à l'intérieur de chaque div .row
+                for (let j = i; j < i + 4 && j < universities.length; j++) {
+                    const university = universities[j];
+                    const card = document.createElement('div');
+                    card.classList.add('col-md-3');
+                    card.dataset.key = university.id;
+                    card.innerHTML = `
+                <div class="card fixed-height" style="margin-top: 10px;">
+                    <img src="${imagePath}/${university.image}" class="card-img-top fixed-image" alt="Université image">
+                    <div class="card-body">
+                        <h5 class="card-title">${university.nom}</h5>
+                        <div class="overflow-auto" style="max-height: 50px;">
+                            <p class="card-text">${university.description}</p>
+                        </div>
+                        <div class="overflow-auto" style="max-height: 35px;">
+                            <a href="${university.site_web}" class="card-link">${university.site_web}</a>
+                        </div>
+                        ${selectedCriteria.length > 0 ? `
+                        <div>
+                            <p>Rang : ${j + 1}</p>
+                            <p>Moyenne : ${calculateAverage(university, selectedCriteria)}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <a href="/universite/${university.id}" class="btn btn-primary" title="Voir les détails de cette université">
+                                    <img src="{{ asset('icones/infos.svg') }}" style="height: 40px;" />
+                                </a>
+                            </div>
+                            @if(Auth::user())
+                            <div class="col-md-3">
+                                <button type="button" title="Cliquez pour noter cette université" class="btn btn-warning" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
+                                    <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                                </button>
+                            </div>
+                            @else
+                            <div class="col-md-3">
+                                <a href="{{ route('login') }}" class="btn btn-warning" title="Cliquez pour noter cette université">
+                                    <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
+                                </a>
+                            </div>
+                            @endif
+                            @if(Auth::user()?->is_admin)
+                            <div class="col-md-3">
+                                <a href="/universite/${university.id}/edit" class="btn btn-secondary" title="Mettre à jour les informations de cette université">
+                                    <img src="{{ asset('icones/editer.svg') }}" style="height: 40px;" />
+                                </a>
+                            </div>
+                            @if (count($criteres) > 0)
+                            <div class="col-md-3">
+                                <form action="/universitedes/${university.id}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" title="Cliquez pour supprimer cette université">
+                                        <img src="{{ asset('icones/supprimer.svg') }}" style="height: 40px;" />
+                                    </button>
+                                </form>
+                            </div>
+                            @endif
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            `;
+                    row.appendChild(card);
+                }
+            }
+        }
+
+
+        function calculateAverage(university, selectedCriteria) {
+            const totalAverage = selectedCriteria.reduce((acc, criterionId) => {
+                const average = university['average_' + criterionId];
+                return acc + average;
+            }, 0);
+
+            return totalAverage / selectedCriteria.length;
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateUniversities);
         });
 
-        function updateUniversitiesOrder(newOrder) {
-            universities = newOrder; // Mise à jour directe des universités avec le nouvel ordre
-            while (universitiesContainer.firstChild) {
-                universitiesContainer.removeChild(universitiesContainer.firstChild);
-            }
-            renderUniversities(universities);
-        }
-
-        function renderUniversities(universities) {
-            universitiesContainer.innerHTML = '';
-            const imagePath = "{{ asset('storage/universites_images/') }}";
-            universities.sort((a, b) => {
-                return b.averageRating - a.averageRating; // Tri par ordre décroissant
-            });
-
-            let row = document.createElement('div');
-            row.classList.add('row');
-
-            universities.forEach((university, index) => {
-                const card = document.createElement('div');
-                card.classList.add('col-md-3', 'mb-4');
-                const rank = index + 1;
-                card.innerHTML = `
-    <div class="card fixed-height" style="margin-top: 10px;">
-        <img src="${imagePath}/${university.image}" class="card-img-top fixed-image" alt="Université image">
-        <div class="card-body">
-            <h5 class="card-title">${rank}. ${university.nom}</h5>
-            <p class="card-text">${university.description}</p>
-            <a href="${university.site_web}" class="card-link">${university.site_web}</a>
-        </div>
-        <div class="card-footer">
-            <div class="form-group row">
-                <div class="col-md-3">
-                    <a href="/universite/${university.id}" class="btn btn-primary">
-                        <img src="{{ asset('icones/infos.svg') }}" style="height: 40px;" />
-                    </a>
-                </div>
-                @if(Auth::user())
-                <div class="col-md-3">
-                    <button type="button" title="Cliquez pour noter cette université" class="btn btn-warning" data-toggle="modal" data-target="#NoteUniversiteModal" data-universite-id="${university.id}">
-                        <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
-                    </button>
-                </div>
-                @else
-                <div class="col-md-3">
-                    <a href="{{ route('login') }}" class="btn btn-warning" title="Cliquez pour noter cette université">
-                        <img src="{{ asset('icones/noter.svg') }}" style="height: 40px;" />
-                    </a>
-                </div>
-                @endif
-                @if(Auth::user()?->is_admin)
-                <div class="col-md-3">
-                    <a href="/universite/${university.id}/edit" class="btn btn-secondary" title="Mettre à jour les informations de cette université">
-                        <img src="{{ asset('icones/edit.svg') }}" style="height: 40px;" />
-                    </a>
-                </div>
-                @if (count($criteres) > 0)
-                <div class="col-md-3">
-                    <form action="/universitedes/${university.id}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette université ?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger" title="Cliquez pour supprimer cette université">
-                            <img src="{{ asset('icones/supprimer.svg') }}" style="height: 40px;" />
-                        </button>
-                    </form>
-                </div>
-                @endif
-                @endif
-            </div>
-        </div>
-        <div class="card-footer">
-            <p class="rank">Rang: ${rank}</p>
-            <p class="average">Moyenne: ${university.averageRating}</p>
-        </div>
-    </div>
-    `;
-
-                row.appendChild(card);
-
-                if ((index + 1) % 4 === 0 || index === universities.length - 1) {
-                    universitiesContainer.appendChild(row);
-                    row = document.createElement('div');
-                    row.classList.add('row');
-                }
-            });
-        }
-
+        updateUniversities();
     });
 </script>
-
-
-
 
 @endsection
