@@ -313,7 +313,7 @@ $index++;
             <form id="noteUniversiteForm" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="text" name="universite_id" id="universite_id">
+                <input type="hidden" name="universite_id" id="universite_id">
                 <div class="modal-body">
                     <div id="criteriaInputs"></div>
                 </div>
